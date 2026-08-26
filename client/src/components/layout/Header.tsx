@@ -1,28 +1,35 @@
 import { Link, useLocation } from 'react-router-dom'
 import logo from '../../../public/favicon.svg'
+import styles from './Header.module.css'
 
 export function Header() {
     const location = useLocation()
+
+    const navLinkClass = (path: string) =>
+        `${styles.navLink} ${location.pathname === path ? styles.navLinkActive : ''}`
+
     return (
-        <div className = "header">
-            <div className = "header__brand">
-                <img src = { logo } alt = "BookRoom" />
-                <Link to = "/">
+        <div className={styles.header}>
+            <div className={styles.brand}>
+                <img src={logo} alt="BookRoom" />
+                <Link to="/">
                     <h2>BookRoom</h2>
                 </Link>
             </div>
-            <div className = "header__nav">
-                <Link to = "/rooms" className = {location.pathname === "/rooms" ? "active" : ""}>Переговорные</Link>
-                <Link to = "/booking" className = {location.pathname === "/booking" ? "active" : ""}>Мои бронирования</Link>
+            <div className={styles.nav}>
+                <Link to="/rooms" className={navLinkClass('/rooms')}>
+                    Переговорные
+                </Link>
+                <Link to="/booking" className={navLinkClass('/booking')}>
+                    Мои бронирования
+                </Link>
             </div>
-            <div className = "header__user">
-                <div className = "header__user__name">
-                    Тестовый
-                </div>
-                <div className = "header__user__avatar__wrapper">
-                    <img src = { logo } alt = "Avatar" />
+            <div className={styles.user}>
+                <div className={styles.userName}>Тестовый</div>
+                <div className={styles.avatarWrapper}>
+                    <img src={logo} alt="Avatar" />
                 </div>
             </div>
         </div>
     )
-}   
+}
