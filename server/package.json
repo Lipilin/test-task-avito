@@ -1,5 +1,5 @@
 {
-  "name": "meeting-room-booking-backend",
+  "name": "@avito/server",
   "version": "1.0.0",
   "private": true,
   "description": "Backend API for the meeting room booking frontend assignment",

@@ -27,6 +27,7 @@ body{
   margin: 0 auto;
   min-height: 1024px;
   padding: 16px;
+  overflow-y: hidden;
 }
 
 a{

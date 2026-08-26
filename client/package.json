@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "@avito/client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,8 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2"
+    "react-router-dom": "^7.18.2",
+    "@avito/server": "*"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -1,8 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
-import logo from '../../../public/favicon.svg'
+import logo from '../../assets/favicon.svg'
 import styles from './Header.module.css'
+import type { User } from '../../utils/api/types'
 
-export function Header() {
+interface HeaderProps{
+    user: User | null
+}
+
+export function Header({ user }: HeaderProps) {
     const location = useLocation()
 
     const navLinkClass = (path: string) =>
@@ -25,10 +30,24 @@ export function Header() {
                 </Link>
             </div>
             <div className={styles.user}>
-                <div className={styles.userName}>Тестовый</div>
-                <div className={styles.avatarWrapper}>
-                    <img src={logo} alt="Avatar" />
-                </div>
+                {
+                    user ? (
+                        <>
+                            <div className={styles.userName}>{user.displayName}</div>
+                            <div className={styles.avatarWrapper}>
+                                {
+                                    user.avatarUrl ? (
+                                        <img src={user.avatarUrl} alt="Avatar" />
+                                    ) : (
+                                        <div className={styles.avatarPlaceholder}>
+                                            <span>{user.initials}</span>
+                                        </div>
+                                    )
+                                }
+                            </div> 
+                        </>
+                    ) : null
+                }
             </div>
         </div>
     )
