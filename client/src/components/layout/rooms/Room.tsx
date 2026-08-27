@@ -2,12 +2,14 @@ import type { Room } from '@avito/server/src/domain/models'
 import usersIcon from '../../../assets/users.svg'
 import clockIcon from '../../../assets/clock.svg'
 import styles from './Room.module.css'
+import { useNavigate } from 'react-router-dom'
 
 interface RoomProps {
     room: Room
 }
 
 export function Room({ room }: RoomProps) {
+    const navigate = useNavigate()
     return (
         <div className={styles.wrapper}>
             <div className={styles.body}>
@@ -30,8 +32,12 @@ export function Room({ room }: RoomProps) {
                     Доступно на выбранное время
                 </div>
                 <div className={styles.buttons}>
-                    <div className={styles.detailButton}>Подробнее</div>
-                    <div className={styles.bookButton}>Забронировать</div>
+                    <div className={styles.detailButton} onClick={() => navigate(`/room/${room.id}`)}>
+                        Подробнее
+                    </div>
+                    <div className={styles.bookButton}>
+                        Забронировать
+                    </div>
                 </div>
             </div>
         </div>

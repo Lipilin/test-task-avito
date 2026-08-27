@@ -20,6 +20,7 @@ declare global{
         officeId?: string | number
         minCapacity?: number
         from?: string
+        startTime?: string
         to?: string
         duration: number
     }

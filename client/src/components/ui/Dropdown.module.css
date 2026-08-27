@@ -28,19 +28,24 @@
 
 .dropdown {
   position: relative;
+  box-sizing: border-box;
   border: 1px solid #e5e7eb;
   padding: 10px 14px;
   border-radius: 8px;
-  display: inline-block;
   background-color: var(--bg);
   cursor: pointer;
 }
 
 .dropdownOffice {
+  display: inline-block;
   border: none;
   padding: 0;
-  display: block;
   background-color: transparent;
+}
+
+.dropdownFilter {
+  display: block;
+  width: 100%;
 }
 
 .activeItem {
@@ -123,12 +128,13 @@
 
 .variants {
   display: none;
+  box-sizing: border-box;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 8px 24px 0 #0f172a14;
-  width: 100%;
   background-color: var(--bg);
   z-index: 10;
+  overflow: hidden;
 }
 
 .dropdown:focus-within .variants {
@@ -136,10 +142,15 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
 }
 
 .dropdownOffice:focus-within .variants {
-  min-width: 280px;
+  width: auto;
+  min-width: 100%;
+  max-width: 320px;
 }
 
 .element {
@@ -150,6 +161,7 @@
   line-height: 20px;
   color: var(--text-h);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .element:hover {

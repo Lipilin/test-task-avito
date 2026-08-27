@@ -17,13 +17,21 @@ export async function getOffices(): Promise<Office[]>{
 }
 
 export async function getRooms(request: RoomListRequest): Promise<Room[]>{
-    if(request.from){
-        let date = new Date(request.from);
-        date.setMinutes(date.getMinutes() + request.duration);
-        request.to = date.toISOString();
+    const { startTime, ...params } = request
+
+    if (params.from) {
+        const to = new Date(params.from)
+        to.setMinutes(to.getMinutes() + request.duration)
+        params.to = to.toISOString()
     }
+
     const response = await axios.get<RoomsListResponse>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.LIST}`, {
-        params: request
+        params,
     })
     return response.data.items
+}
+
+export async function getRoomById(id: string): Promise<Room> {
+    const response = await axios.get<Room>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.INFO}${id}`)
+    return response.data
 }

@@ -6,8 +6,9 @@ export const ENDPOINTS ={
         LIST: '/api/v1/offices'
     }, 
     ROOMS: {
-        LIST: '/api/v1/rooms'
-    }
+        LIST: '/api/v1/rooms', 
+        INFO: '	/api/v1/rooms/'
+    }, 
 } as const
 
 export const DURATION_OPTIONS = [

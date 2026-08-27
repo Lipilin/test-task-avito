@@ -31,12 +31,33 @@
 .filterForm {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px 40px;
   gap: 16px;
   border-bottom: 1px solid var(--border);
   background-color: var(--bg);
+}
+
+.filterItemDate {
+  flex: 0 0 240px;
+  width: 240px;
+}
+
+.filterItemTime {
+  flex: 0 0 132px;
+  width: 132px;
+}
+
+.filterItemDuration {
+  flex: 0 0 168px;
+  width: 168px;
+}
+
+.filterItemCapacity {
+  flex: 0 0 200px;
+  width: 200px;
 }
 
 .roomList {
@@ -61,3 +82,4 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
+

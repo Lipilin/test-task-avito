@@ -1,0 +1,107 @@
+.container{
+    background-color: var(--bg-inner);
+    min-height: 520px;
+    padding: 24px 40px 40px;
+}
+
+.wrapper{
+    display: flex;
+    gap: 32px;
+    padding: 40px 48px 40px;
+}
+
+.roomInfo{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg);
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    border-width: 1px;
+    gap: 20px;
+    padding: 24px;
+}
+
+
+.roomBookings{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: var(--bg);
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    border-width: 1px;
+    padding: 32px;
+    gap: 24px;
+}
+
+.delimeter{
+    width: 100%; 
+    border: 1px solid var(--border);
+    height: 0px;
+}
+
+.roomName {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--text-h);
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--text);
+}
+
+.featureItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+}
+
+.featureIcon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.scheduleTitle {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    color: var(--text-h);
+}
+
+.actions{
+    position: relative;
+}
+
+.bookButton{
+    display: inline-block;
+    border-radius: 8px;
+    padding-top: 10px;
+    padding-right: 24px;
+    padding-bottom: 10px;
+    padding-left: 24px;
+    background-color: var(--special-color);
+    color: var(--bg);
+    position: absolute;
+    right: 0;
+}
+
+.bookButton:hover{
+    background-color: var(--special-color-hover);
+}
