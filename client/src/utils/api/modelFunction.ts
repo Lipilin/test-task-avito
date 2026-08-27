@@ -1,4 +1,4 @@
-import type { User, Office, OfficeListResponse, Room, RoomsListResponse } from './types'
+import type { User, Office, Room } from './types'
 import axios from 'axios'
 import { ENDPOINTS, BACKEND_HOST } from './general'
 
@@ -16,11 +16,9 @@ export async function getOffices(): Promise<Office[]>{
     return response.data.items
 }
 
-export async function getRooms(id: string | number): Promise<Room[]>{
+export async function getRooms(request: RoomListRequest): Promise<Room[]>{
     const response = await axios.get<RoomsListResponse>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.LIST}`, {
-        params: {
-            officeId: id
-        }
+        params: request
     })
     return response.data.items
 }

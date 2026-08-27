@@ -1,12 +1,25 @@
 export * from '@avito/server/src/domain/models'
 
-interface BaseResponse<T>{
-    items: T[]
-}
+declare global{
+    interface BaseResponse<T>{
+        items: T[]
+    }
 
-export interface OfficeListResponse extends BaseResponse<Office>{
+    interface BaseRequest{
+        
+    }
 
-}
-export interface RoomsListResponse extends BaseResponse<Room>{
+    export interface OfficeListResponse extends BaseResponse<Office>{
 
+    }
+    export interface RoomsListResponse extends BaseResponse<Room>{
+    
+    }
+    
+    export interface RoomListRequest{
+        officeId?: string | number
+        minCapacity?: number
+        from?: string
+        to?: string
+    }
 }

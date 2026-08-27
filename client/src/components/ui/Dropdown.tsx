@@ -11,6 +11,7 @@ interface DropdownProps<T extends BaseElement> {
     items: T[]
     setItem: (value: T) => void
     activeItem: T | null
+    placeholder?: string
     title: string
     titleClassName?: string
     className?: string
@@ -22,11 +23,13 @@ export function Dropdown<T extends BaseElement>({
     items,
     setItem,
     activeItem,
+    placeholder,
     titleClassName,
     className,
     leadingIcon,
 }: DropdownProps<T>) {
     const dropdownClassName = [styles.dropdown, className].filter(Boolean).join(' ')
+    const hasValue = activeItem !== null
 
     return (
         <div className={styles.wrapper}>
@@ -34,7 +37,9 @@ export function Dropdown<T extends BaseElement>({
             <div className={dropdownClassName} tabIndex={0}>
                 <div className={styles.activeItem}>
                     {leadingIcon ? <span className={styles.leadingIcon}>{leadingIcon}</span> : null}
-                    <span className={styles.activeItemText}>{activeItem?.name || ''}</span>
+                    <span className={hasValue ? styles.activeItemText : styles.placeholder}>
+                        {hasValue ? activeItem.name : placeholder}
+                    </span>
                     <img src={arrow} alt="" />
                 </div>
                 <div className={styles.variants}>

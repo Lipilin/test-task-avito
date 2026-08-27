@@ -75,6 +75,27 @@
   white-space: nowrap;
 }
 
+.placeholder {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #94a3b8;
+}
+
+.dropdownOffice .placeholder {
+  flex: 0 1 auto;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: var(--text-h);
+}
+
 .dropdownOffice .activeItem {
   justify-content: flex-start;
   font-size: 24px;

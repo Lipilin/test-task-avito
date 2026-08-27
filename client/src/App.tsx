@@ -6,8 +6,8 @@ import { RoomList } from './components/pages/RoomList'
 import { RoomDetail } from './components/pages/RoomDetail'
 import { NotFound } from './components/pages/NotFound'
 import { Header } from './components/layout'
-import type { User, Office } from './utils/api/types'
-import { getOffices, getUser } from './utils/api/modelFunction'
+import type { User } from './utils/api/types'
+import { getUser } from './utils/api/modelFunction'
 
 
 function App() {
