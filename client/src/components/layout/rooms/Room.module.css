@@ -1,0 +1,140 @@
+.wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+.body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--text-h);
+}
+
+.floor {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #64748b;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--text);
+}
+
+.metaIcon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.badge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.badgeAvailable {
+  background-color: #f0fdfa;
+  color: #0f766e;
+}
+
+.badgeUnavailable {
+  background-color: #f8fafc;
+  color: #64748b;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badgeAvailable .badgeDot {
+  background-color: #0d9488;
+}
+
+.badgeUnavailable .badgeDot {
+  background-color: #94a3b8;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.detailButton,
+.bookButton {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+}
+
+.detailButton {
+  color: var(--special-color);
+  background-color: transparent;
+}
+
+.bookButton {
+  color: var(--bg);
+  background-color: var(--special-color);
+}
+
+.bookButtonDisabled {
+  color: #ffffff;
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
