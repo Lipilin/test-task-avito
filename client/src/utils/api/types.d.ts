@@ -21,5 +21,6 @@ declare global{
         minCapacity?: number
         from?: string
         to?: string
+        duration: number
     }
 }

@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@avito/server": "*",
     "react": "^19.2.8",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2",
-    "@avito/server": "*"
+    "react-imask": "^7.6.1",
+    "react-input-mask": "^2.0.4",
+    "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

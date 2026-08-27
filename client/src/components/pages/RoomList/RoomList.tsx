@@ -4,13 +4,15 @@ import type { Office } from '@avito/server/src/domain/models'
 import { Dropdown, dropdownStyles } from '../../ui/Dropdown'
 import type { Room } from '@avito/server/src/domain/models'
 import { Room as RoomComponent } from '../../layout/rooms/Room'
-import calendarIcon from '../../../assets/calendar.svg'
 import clockIcon from '../../../assets/clock.svg'
 import usersIcon from '../../../assets/users.svg'
 import styles from './RoomList.module.css'
 import { SelectOffice } from './partials/SelectOffice/SelectOffice'
 import { Loading } from './partials/Loading/Loading'
 import { Empty } from './partials/Empty/Empty'
+import { DatePickerField } from '../../ui/DatePickerField'
+import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '../../../utils/api/general'
+import { IMaskInput } from 'react-imask'
  
 function getTimezoneLabel(timezone: string) {
     return timezone.split('/').pop() ?? timezone
@@ -20,7 +22,9 @@ export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
     const [activeOffice, setActiveOffice] = useState<Office | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [request, setRequest] = useState<RoomListRequest>({})
+    const [request, setRequest] = useState<RoomListRequest>({
+        duration: 15,
+    })
     const [rooms, setRooms] = useState<Room[]>([])
     useEffect(() => {
         async function fetchOffices() {
@@ -46,7 +50,7 @@ export function RoomList() {
         }
         setIsLoading(true)
         fetchRooms()
-    }, [request.officeId, request.minCapacity, request.from, request.to])
+    }, [request.officeId, request.minCapacity, request.from, request.duration])
     const component = useMemo(() => {
         if (isLoading) return <Loading />
         if (!activeOffice) return <SelectOffice />
@@ -91,30 +95,25 @@ export function RoomList() {
                 ) : null}
             </div>
             <div className={styles.filterForm}>
-                <Dropdown
-                    items={offices}
-                    setItem={(value: Office) => setActiveOffice(value)}
-                    activeItem={activeOffice}
-                    title="ДАТА"
-                    placeholder='Выберите дату'
-                    titleClassName={dropdownStyles.titleFilter}
-                    className={dropdownStyles.dropdownFilter}
-                    leadingIcon={<img src={calendarIcon} alt="" />}
+                <DatePickerField
+                    selected={request.from ? new Date(request.from) : null}
+                    onChange={(date: Date | null) =>
+                        setRequest((prev) => ({
+                            ...prev,
+                            from: date?.toISOString(),
+                        }))
+                    }
                 />
+
                 <Dropdown
-                    items={offices}
-                    setItem={(value: Office) => setActiveOffice(value)}
-                    activeItem={activeOffice}
-                    title="ВРЕМЯ НАЧАЛА"
-                    placeholder='--:--'
-                    titleClassName={dropdownStyles.titleFilter}
-                    className={dropdownStyles.dropdownFilter}
-                    leadingIcon={<img src={clockIcon} alt="" />}
-                />
-                <Dropdown
-                    items={offices}
-                    setItem={(value: Office) => setActiveOffice(value)}
-                    activeItem={activeOffice}
+                    items={ DURATION_OPTIONS }
+                    setItem={(value) => {
+                        setRequest((prev) => ({
+                            ...prev,
+                            duration: value.id
+                        }))
+                    }}
+                    activeItem={DURATION_OPTIONS.find((item) => item.id === request?.duration) || null}
                     title="ДЛИТЕЛЬНОСТЬ"
                     placeholder='Выберите'
                     titleClassName={dropdownStyles.titleFilter}
@@ -122,9 +121,12 @@ export function RoomList() {
                 />
 
                 <Dropdown
-                    items={offices}
-                    setItem={(value: Office) => setActiveOffice(value)}
-                    activeItem={activeOffice}
+                    items={ CAPACITY_OPTIONS }
+                    setItem={(value) => setRequest((prev) => ({
+                        ...prev,
+                        minCapacity: value.id
+                    }))}
+                    activeItem={ CAPACITY_OPTIONS.find((item) => item.id === request?.minCapacity) || null }
                     title="ВМЕСТИМОСТЬ"
                     placeholder='Не указано'
                     titleClassName={dropdownStyles.titleFilter}

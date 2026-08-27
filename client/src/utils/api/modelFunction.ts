@@ -17,6 +17,11 @@ export async function getOffices(): Promise<Office[]>{
 }
 
 export async function getRooms(request: RoomListRequest): Promise<Room[]>{
+    if(request.from){
+        let date = new Date(request.from);
+        date.setMinutes(date.getMinutes() + request.duration);
+        request.to = date.toISOString();
+    }
     const response = await axios.get<RoomsListResponse>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.LIST}`, {
         params: request
     })
