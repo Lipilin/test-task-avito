@@ -1,6 +1,7 @@
 export * from '@avito/server/src/domain/models'
 
 declare global{
+
     interface BaseResponse<T>{
         items: T[]
     }
@@ -9,19 +10,33 @@ declare global{
         
     }
 
-    export interface OfficeListResponse extends BaseResponse<Office>{
+    interface OfficeListResponse extends BaseResponse<Office>{
 
     }
-    export interface RoomsListResponse extends BaseResponse<Room>{
+    interface RoomsListResponse extends BaseResponse<Room>{
     
     }
+
+    interface RoomListFilters{
+        duration: number
+        from: Date
+        minCapacity: number
+        startTime?: string
+    }
     
-    export interface RoomListRequest{
+    interface RoomListRequest{
         officeId?: string | number
         minCapacity?: number
         from?: string
-        startTime?: string
         to?: string
-        duration: number
+    }
+
+}
+
+declare module '@avito/server/src/domain/models' {
+    interface Room {
+        available?: boolean
     }
 }
+
+export {}

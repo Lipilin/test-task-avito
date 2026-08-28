@@ -8,6 +8,8 @@ import displayIcon from '../../../assets/room-detail/display.svg'
 import whiteboardIcon from '../../../assets/room-detail/whiteboard.svg'
 import videoIcon from '../../../assets/room-detail/video.svg'
 import { BookRoomModal } from '../../layout/modals'
+import { Loading } from './partials/Loading'
+import { Error } from '../RoomList/partials/Error'
 
 const featureIcons: Record<string, string> = {
     display: displayIcon,
@@ -18,20 +20,39 @@ const featureIcons: Record<string, string> = {
 export function RoomDetail() {
     const { id } = useParams()
     const [room, setRoom] = useState<Room | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [hasError, setHasError] = useState(false)
+    const [onRetry, setOnRetry] = useState(0)
     const [isBookRoomModalOpen, setIsBookRoomModalOpen] = useState(false)
     useEffect(() => {
         if(!id) return
         async function fetchRoom() {
-            const room = await getRoomById(id!)
-            setRoom(room)
+            try {
+                setHasError(false)
+                setIsLoading(true)
+                const room = await getRoomById(id!)
+                setRoom(room)
+            } catch {
+                setHasError(true)
+                setRoom(null)
+            } finally {
+                setIsLoading(false)
+            }
         }
         fetchRoom()
-    }, [id])
+    }, [id, onRetry])
     return (
         <div className={styles.container}>
             <BookRoomModal isOpen={isBookRoomModalOpen} onClose={() => setIsBookRoomModalOpen(false)} />
             {
-                room ? (
+                hasError ? (
+                    <Error
+                        description="Произошла ошибка при загрузке переговорной"
+                        onRetry={() => setOnRetry((count) => count + 1)}
+                    />
+                ) : isLoading ? (
+                    <Loading />
+                ) : room ? (
                     <div className = {styles.wrapper}>
                         <div className = {styles.roomInfo}>
                             <div className={styles.roomName}>
@@ -61,8 +82,28 @@ export function RoomDetail() {
                             <div className={styles.scheduleTitle}>
                                 Расписание на день
                             </div>
+                            <div className = {styles.timeline}>
+                                <div className = {styles.timeline_item}>
+                                    <div className = {styles.timeline_item_time}>
+                                        09:00
+                                    </div>
+                                    <div className = {styles.timeline_item_content}>
+                                            
+                                    </div>
+                                    <div className = { styles.delimeter }></div>
+                                </div>
+                                <div className = {styles.timeline_item}>
+                                    <div className = {styles.timeline_item_time}>
+                                        10:00
+                                    </div>
+                                    <div className = {styles.timeline_item_content}>
+                                            
+                                    </div>
+                                    <div className = { styles.delimeter }></div>
+                                </div>
+                            </div>
                             <div className = { styles.actions }>
-                                <div className = { styles.bookButton } onClick={() => setIsBookRoomModalOpen(true)}>
+                                <div className = { room.available === false ? styles.bookButtonDisabled : styles.bookButton } onClick={() => setIsBookRoomModalOpen(true)}>
                                     Забронировать комнату
                                 </div>
                             </div>

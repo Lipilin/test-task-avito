@@ -110,7 +110,8 @@
 }
 
 .detailButton,
-.bookButton {
+.bookButton,
+.bookButtonDisabled {
   flex: 1;
   padding: 10px 16px;
   border-radius: 8px;
@@ -141,4 +142,13 @@
 
 .bookButton:hover {
   background-color: var(--special-color-hover);
+}
+
+.bookButtonDisabled{
+  background-color: #cbd5e1;
+}
+
+.timeline{
+  display: flex;
+  flex-direction: column;
 }

@@ -16,7 +16,9 @@ export const DURATION_OPTIONS = [
     { id: 30, name: '30 мин' },
     { id: 45, name: '45 мин' },
     { id: 60, name: '1 час' },
+    { id: 75, name: '1 час 15 мин' },
     { id: 90, name: '1 час 30 мин' },
+    { id: 105, name: '1 час 45 мин' },
     { id: 120, name: '2 час' },
 ]
 

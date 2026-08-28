@@ -8,6 +8,7 @@ import usersIcon from '../../../assets/users.svg'
 import styles from './RoomList.module.css'
 import { SelectOffice } from './partials/SelectOffice/SelectOffice'
 import { Loading } from './partials/Loading/Loading'
+import { Error } from './partials/Error/Error'
 import { Empty } from './partials/Empty/Empty'
 import { DatePickerField } from '../../ui/DatePickerField'
 import { TimeInputField } from '../../ui/TimeInputField'
@@ -17,13 +18,37 @@ function getTimezoneLabel(timezone: string) {
     return timezone.split('/').pop() ?? timezone
 }
 
+function getDefaultStartTime() {
+    const date = new Date()
+    const minutes = date.getMinutes()
+    const roundedMinutes = Math.ceil(minutes / 15) * 15
+    date.setMinutes(roundedMinutes)
+    return date
+}
+
+function formatTime(date: Date) {
+    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+}
+
+function applyTimeToDate(date: Date, time: string): Date {
+    const match = time.match(/^(\d{2}):(\d{2})$/)
+    if (!match) return date
+
+    const next = new Date(date)
+    next.setHours(Number(match[1]), Number(match[2]), 0, 0)
+    return next
+}
+
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
     const [activeOffice, setActiveOffice] = useState<Office | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [request, setRequest] = useState<RoomListRequest>({
-        from: new Date().toISOString(),
-        duration: 15,
+    const [hasError, setHasError] = useState(false)
+    const [onRetry, setOnRetry] = useState(0)
+    const [request, setRequest] = useState<RoomListFilters>({
+        from: getDefaultStartTime(),
+        duration: DURATION_OPTIONS[0].id,
+        minCapacity: CAPACITY_OPTIONS[0].id,
     })
     const [rooms, setRooms] = useState<Room[]>([])
     useEffect(() => {
@@ -42,16 +67,31 @@ export function RoomList() {
         })
     }, [activeOffice])
     useEffect(() => {
-        if (!request.officeId) return
+        if (!activeOffice) return
         async function fetchRooms() {
-            const rooms = await getRooms(request)
-            setRooms(rooms)
-            setIsLoading(false)
+            try {
+                setHasError(false)
+                const to = new Date(request.from!)
+                to.setMinutes(to.getMinutes() + request.duration!)
+                const rooms = await getRooms({
+                    officeId: activeOffice!.id,
+                    from: request.from?.toISOString(),
+                    to: to.toISOString(),
+                    minCapacity: request.minCapacity,
+                })
+                setRooms(rooms)
+            } catch {
+                setHasError(true)
+                setRooms([])
+            } finally {
+                setIsLoading(false)
+            }
         }
         setIsLoading(true)
         fetchRooms()
-    }, [request.officeId, request.minCapacity, request.from, request.startTime, request.duration])
+    }, [onRetry, activeOffice, request.minCapacity, request.from, request.duration])
     const component = useMemo(() => {
+        if (hasError) return <Error onRetry={() => setOnRetry((count) => count + 1)} />
         if (isLoading) return <Loading />
         if (!activeOffice) return <SelectOffice />
         if (rooms.length === 0) return <Empty />
@@ -65,7 +105,7 @@ export function RoomList() {
                 </div>
             </div>
         )
-    }, [isLoading, activeOffice, rooms])
+    }, [hasError, isLoading, activeOffice, rooms])
     return (
         <div className={styles.container}>
             <div className={styles.officeForm}>
@@ -97,22 +137,22 @@ export function RoomList() {
             <div className={styles.filterForm}>
                 <div className={styles.filterItemDate}>
                     <DatePickerField
-                        selected={request.from ? new Date(request.from) : null}
+                        selected={ request.from || new Date()}
                         onChange={(date: Date | null) =>
                             setRequest((prev) => ({
                                 ...prev,
-                                from: date?.toISOString(),
+                                from: date ?? new Date(),
                             }))
                         }
                     />
                 </div>
                 <div className={styles.filterItemTime}>
                     <TimeInputField
-                        value={request.startTime ?? ''}
+                        value={formatTime(request.from)}
                         onChange={(startTime) =>
                             setRequest((prev) => ({
                                 ...prev,
-                                startTime,
+                                from: applyTimeToDate(prev.from, startTime),
                             }))
                         }
                     />

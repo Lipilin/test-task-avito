@@ -86,7 +86,9 @@
 }
 
 .actions{
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .bookButton{
@@ -98,10 +100,26 @@
     padding-left: 24px;
     background-color: var(--special-color);
     color: var(--bg);
-    position: absolute;
-    right: 0;
 }
 
 .bookButton:hover{
     background-color: var(--special-color-hover);
+}
+
+.timeline{
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline_item_time{
+    color: var(--text);
+    font-size: 13px;
+    height: 48px;
+}
+
+.timeline_item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 48px;
 }

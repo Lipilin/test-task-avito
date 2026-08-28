@@ -33,7 +33,7 @@
 .input {
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 14px 10px 38px;
+  padding: 10px 36px 10px 38px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background-color: var(--bg);
@@ -57,4 +57,46 @@
 .input:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.steppers {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transform: translateY(-50%);
+}
+
+.stepperButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.stepperButton:hover:not(:disabled) {
+  background-color: #f1f5f9;
+}
+
+.stepperButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.stepperIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.stepperIconUp {
+  transform: rotate(180deg);
 }

@@ -27,15 +27,22 @@ export function Room({ room }: RoomProps) {
                         Свободна весь день
                     </li>
                 </ul>
-                <div className={`${styles.badge} ${styles.badgeAvailable}`}>
-                    <span className={styles.badgeDot} />
-                    Доступно на выбранное время
-                </div>
+                {room.available === false ? (
+                    <div className={`${styles.badge} ${styles.badgeUnavailable}`}>
+                        <span className={styles.badgeDot} />
+                        Недоступно на выбранное время
+                    </div>
+                ): (
+                    <div className={`${styles.badge} ${styles.badgeAvailable}`}>
+                        <span className={styles.badgeDot} />
+                            Доступно на выбранное время
+                    </div>
+                ) }
                 <div className={styles.buttons}>
                     <div className={styles.detailButton} onClick={() => navigate(`/room/${room.id}`)}>
                         Подробнее
                     </div>
-                    <div className={styles.bookButton}>
+                    <div className={ room.available === false ? styles.bookButtonDisabled : styles.bookButton} >
                         Забронировать
                     </div>
                 </div>
