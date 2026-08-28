@@ -24,6 +24,66 @@
   width: 100%;
 }
 
+.wrapperSchedule {
+  width: auto;
+}
+
+.wrapperSchedule :global(.react-datepicker-wrapper) {
+  width: auto;
+}
+
+:global(#avito-datepicker-portal) {
+  position: relative;
+  z-index: 1000;
+}
+
+:global(#avito-datepicker-portal .react-datepicker-popper) {
+  z-index: 1000;
+}
+
+.scheduleTrigger {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: var(--bg);
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+.scheduleTrigger:hover {
+  border-color: #cbd5e1;
+}
+
+.scheduleIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.scheduleLabel {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--special-color);
+}
+
+.scheduleDate {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--text-h);
+}
+
+.scheduleDate::before {
+  content: '·';
+  margin-right: 8px;
+  color: #cbd5e1;
+}
+
 .inputIcon {
   position: absolute;
   top: 50%;
@@ -61,7 +121,7 @@
 }
 
 .popper {
-  z-index: 20;
+  z-index: 1000;
 }
 
 .calendar {

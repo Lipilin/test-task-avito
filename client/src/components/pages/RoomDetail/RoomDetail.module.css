@@ -76,6 +76,14 @@
     height: 16px;
 }
 
+.scheduleHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
 .scheduleTitle {
     margin: 0;
     font-family: var(--sans);

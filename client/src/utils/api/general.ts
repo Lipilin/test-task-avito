@@ -7,7 +7,8 @@ export const ENDPOINTS ={
     }, 
     ROOMS: {
         LIST: '/api/v1/rooms', 
-        INFO: '	/api/v1/rooms/'
+        INFO: '	/api/v1/rooms', 
+        BOOKINGS: (roomId: string) => `/api/v1/rooms/${roomId}/bookings`
     }, 
 } as const
 
@@ -32,3 +33,9 @@ export const CAPACITY_OPTIONS = [
 ]
 
 export const BACKEND_HOST = 'http://localhost:3000'
+
+export const AVAILABLE_TIME = {
+    from: '09:00',
+    to: '20:00',
+    stepMinutes: 15,
+} as const

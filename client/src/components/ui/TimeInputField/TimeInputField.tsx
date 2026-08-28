@@ -4,23 +4,11 @@ import { IMaskInput } from 'react-imask'
 import IMask from 'imask'
 import clockIcon from '../../../assets/clock.svg'
 import chevronDownIcon from '../../../assets/chevron-down.svg'
+import { AVAILABLE_TIME_MINUTES, formatMinutes, parseTimeToMinutes, TIME_PATTERN } from '../../../utils/other'
 import styles from './TimeInputField.module.css'
 
-const STEP_MINUTES = 15
-const MIN_MINUTES = 9 * 60
-const MAX_MINUTES = 20 * 60
-const TIME_PATTERN = /^(\d{2}):(\d{2})$/
-
-function parseTimeToMinutes(value: string): number | null {
-    const match = value.match(TIME_PATTERN)
-    if (!match) return null
-
-    const hours = Number(match[1])
-    const minutes = Number(match[2])
-    if (hours > 23 || minutes > 59) return null
-
-    return hours * 60 + minutes
-}
+const { min: MIN_MINUTES, max: MAX_MINUTES, step: STEP_MINUTES, minHour: MIN_HOUR, maxHour: MAX_HOUR } =
+    AVAILABLE_TIME_MINUTES
 
 const timeMaskOptions = {
     mask: 'HH:MM',
@@ -29,8 +17,8 @@ const timeMaskOptions = {
     blocks: {
         HH: {
             mask: IMask.MaskedRange,
-            from: 9,
-            to: 20,
+            from: MIN_HOUR,
+            to: MAX_HOUR,
             maxLength: 2,
         },
         MM: {
@@ -46,12 +34,6 @@ const timeMaskOptions = {
         return totalMinutes >= MIN_MINUTES && totalMinutes <= MAX_MINUTES
     },
 } as const
-
-function formatMinutes(totalMinutes: number): string {
-    const hours = Math.floor(totalMinutes / 60)
-    const minutes = totalMinutes % 60
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
-}
 
 function clampTime(value: string): string {
     const totalMinutes = parseTimeToMinutes(value)

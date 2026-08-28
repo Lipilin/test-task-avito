@@ -13,31 +13,12 @@ import { Empty } from './partials/Empty/Empty'
 import { DatePickerField } from '../../ui/DatePickerField'
 import { TimeInputField } from '../../ui/TimeInputField'
 import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '../../../utils/api/general'
- 
-function getTimezoneLabel(timezone: string) {
-    return timezone.split('/').pop() ?? timezone
-}
-
-function getDefaultStartTime() {
-    const date = new Date()
-    const minutes = date.getMinutes()
-    const roundedMinutes = Math.ceil(minutes / 15) * 15
-    date.setMinutes(roundedMinutes)
-    return date
-}
-
-function formatTime(date: Date) {
-    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
-}
-
-function applyTimeToDate(date: Date, time: string): Date {
-    const match = time.match(/^(\d{2}):(\d{2})$/)
-    if (!match) return date
-
-    const next = new Date(date)
-    next.setHours(Number(match[1]), Number(match[2]), 0, 0)
-    return next
-}
+import {
+    applyTimeToDate,
+    formatTime,
+    getDefaultStartTime,
+    getTimezoneLabel,
+} from '../../../utils/other'
 
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])

@@ -14,12 +14,16 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 registerLocale('ru', ru)
 
+const PORTAL_ID = 'avito-datepicker-portal'
+
 interface DatePickerFieldProps {
     title?: string
     placeholder?: string
     selected?: Date | null
     onChange: (date: Date | null) => void
     className?: string
+    variant?: 'field' | 'schedule'
+    hideTitle?: boolean
 }
 
 function CalendarHeader({
@@ -87,29 +91,53 @@ const DateInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInp
 
 DateInput.displayName = 'DateInput'
 
+const ScheduleDateInput = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+    ({ value, onClick, className }, ref) => (
+        <button
+            ref={ref}
+            type="button"
+            onClick={onClick}
+            className={`${styles.scheduleTrigger} ${className ?? ''}`}
+        >
+            <img src={calendarIcon} alt="" className={styles.scheduleIcon} />
+            <span className={styles.scheduleLabel}>Выбрать дату</span>
+            {typeof value === 'string' && value ? (
+                <span className={styles.scheduleDate}>{value}</span>
+            ) : null}
+        </button>
+    ),
+)
+
+ScheduleDateInput.displayName = 'ScheduleDateInput'
+
 export function DatePickerField({
     title = 'ДАТА',
     placeholder = 'Выберите дату',
     selected = null,
     onChange,
     className,
+    variant = 'field',
+    hideTitle = false,
 }: DatePickerFieldProps) {
     const maxDate = useMemo(() => addDays(startOfDay(new Date()), 30), [])
     const minDate = useMemo(() => startOfDay(new Date()), [])
+    const isSchedule = variant === 'schedule'
 
     return (
-        <div className={`${styles.wrapper} ${className ?? ''}`}>
-            <span className={styles.title}>{title}</span>
+        <div className={`${styles.wrapper} ${isSchedule ? styles.wrapperSchedule : ''} ${className ?? ''}`}>
+            {!hideTitle && !isSchedule ? <span className={styles.title}>{title}</span> : null}
             <ReactDatePicker
                 selected={selected}
                 onChange={onChange}
                 locale="ru"
                 dateFormat="d MMMM, EEE"
                 placeholderText={placeholder}
-                customInput={<DateInput />}
+                customInput={isSchedule ? <ScheduleDateInput /> : <DateInput />}
                 renderCustomHeader={CalendarHeader}
                 calendarContainer={BookingCalendarContainer}
                 popperClassName={styles.popper}
+                popperPlacement={isSchedule ? 'bottom-end' : 'bottom-start'}
+                portalId={PORTAL_ID}
                 minDate={minDate}
                 maxDate={maxDate}
                 formatWeekDay={(name) => name.slice(0, 2).toUpperCase()}

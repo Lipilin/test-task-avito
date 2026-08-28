@@ -1,8 +1,9 @@
 import styles from './RoomDetail.module.css'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import type { Room } from '../../../utils/api/types'
-import { getRoomById } from '../../../utils/api/modelFunction'
+import { addDays, startOfDay } from 'date-fns'
+import type { Booking, Room } from '../../../utils/api/types'
+import { getRoomBookings, getRoomById } from '../../../utils/api/modelFunction'
 import usersIcon from '../../../assets/room-detail/users.svg'
 import displayIcon from '../../../assets/room-detail/display.svg'
 import whiteboardIcon from '../../../assets/room-detail/whiteboard.svg'
@@ -10,6 +11,7 @@ import videoIcon from '../../../assets/room-detail/video.svg'
 import { BookRoomModal } from '../../layout/modals'
 import { Loading } from './partials/Loading'
 import { Error } from '../RoomList/partials/Error'
+import { DatePickerField } from '../../ui/DatePickerField'
 
 const featureIcons: Record<string, string> = {
     display: displayIcon,
@@ -20,17 +22,21 @@ const featureIcons: Record<string, string> = {
 export function RoomDetail() {
     const { id } = useParams()
     const [room, setRoom] = useState<Room | null>(null)
+    const [bookings, setBookings] = useState<Booking[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
     const [isBookRoomModalOpen, setIsBookRoomModalOpen] = useState(false)
+    const [selectedDate, setSelectedDate] = useState(() => startOfDay(new Date()))
     useEffect(() => {
         if(!id) return
         async function fetchRoom() {
             try {
                 setHasError(false)
                 setIsLoading(true)
-                const room = await getRoomById(id!)
+                const room  = await getRoomById({
+                    id: id!
+                })
                 setRoom(room)
             } catch {
                 setHasError(true)
@@ -41,6 +47,20 @@ export function RoomDetail() {
         }
         fetchRoom()
     }, [id, onRetry])
+    useEffect(() => {
+        if(!id) return
+        async function fetchBookings() {
+            const dayStart = startOfDay(selectedDate)
+            const dayEnd = addDays(dayStart, 1)
+            const bookings = await getRoomBookings({
+                id: id!,
+                from: dayStart.toISOString(),
+                to: dayEnd.toISOString(),
+            })
+            setBookings(bookings)
+        }
+        fetchBookings()
+    }, [id, onRetry, selectedDate])
     return (
         <div className={styles.container}>
             <BookRoomModal isOpen={isBookRoomModalOpen} onClose={() => setIsBookRoomModalOpen(false)} />
@@ -50,7 +70,7 @@ export function RoomDetail() {
                         description="Произошла ошибка при загрузке переговорной"
                         onRetry={() => setOnRetry((count) => count + 1)}
                     />
-                ) : isLoading ? (
+                ) : isLoading === true && !room ? (
                     <Loading />
                 ) : room ? (
                     <div className = {styles.wrapper}>
@@ -79,8 +99,20 @@ export function RoomDetail() {
                             </div>
                         </div>
                         <div className = { styles.roomBookings }>
-                            <div className={styles.scheduleTitle}>
-                                Расписание на день
+                            <div className={styles.scheduleHeader}>
+                                <div className={styles.scheduleTitle}>
+                                    Расписание на день
+                                </div>
+                                <DatePickerField
+                                    variant="schedule"
+                                    hideTitle
+                                    selected={selectedDate}
+                                    onChange={(date) => {
+                                        if (date) {
+                                            setSelectedDate(startOfDay(date))
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className = {styles.timeline}>
                                 <div className = {styles.timeline_item}>

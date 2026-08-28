@@ -31,6 +31,15 @@ declare global{
         to?: string
     }
 
+    interface RoomInfoRequest{
+        id: string
+    }
+
+    interface BookRoomRequest{
+        id: string, 
+        from?: string
+        to?: string
+    }
 }
 
 declare module '@avito/server/src/domain/models' {
