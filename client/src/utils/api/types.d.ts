@@ -52,6 +52,10 @@ declare global{
     interface CreateBookingResponse{
         success: boolean
     }
+
+    interface BookingsListResponse extends BaseResponse<BookingView>{
+
+    }
 }
 
 declare module '@avito/server/src/domain/models' {

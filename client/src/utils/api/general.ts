@@ -11,7 +11,9 @@ export const ENDPOINTS ={
         BOOKINGS: (roomId: string) => `/api/v1/rooms/${roomId}/bookings`
     }, 
     BOOKINGS: {
-        CREATE: '/api/v1/bookings'
+        CREATE: '/api/v1/bookings',
+        LIST: '/api/v1/bookings',
+        DELETE: (id: string) => `/api/v1/bookings/${id}`,
     }
 } as const
 

@@ -1,4 +1,4 @@
-import type { User, Office, Room, Booking } from './types'
+import type { User, Office, Room, Booking, BookingView } from './types'
 import axios from 'axios'
 import { ENDPOINTS, BACKEND_HOST } from './general'
 
@@ -37,7 +37,7 @@ export async function getRoomBookings(request: BookRoomRequest): Promise<Booking
             params: {
                 from: from, 
                 to: to
-            }
+            },
         })
         return bookings.data
     }catch(error){
@@ -46,8 +46,17 @@ export async function getRoomBookings(request: BookRoomRequest): Promise<Booking
 }
 
 export async function createBooking(request: CreateBookingRequest): Promise<CreateBookingResponse> {
-    const response = await axios.post<void>(`${BACKEND_HOST}${ENDPOINTS.BOOKINGS.CREATE}`, request)
+    await axios.post<void>(`${BACKEND_HOST}${ENDPOINTS.BOOKINGS.CREATE}`, request)
     return {
         success: true
     }
+}
+
+export async function getBookings(): Promise<BookingView[]> {
+    const response = await axios.get<BookingsListResponse>(`${BACKEND_HOST}${ENDPOINTS.BOOKINGS.LIST}`)
+    return response.data.items
+}
+
+export async function deleteBooking(id: string): Promise<void> {
+    await axios.delete(`${BACKEND_HOST}${ENDPOINTS.BOOKINGS.DELETE(id)}`, {})
 }

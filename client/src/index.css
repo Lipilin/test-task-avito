@@ -11,6 +11,8 @@
   --special-color: #0D9488;
   --special-color-hover: #087F75;
   --bg-inner: #f8fafc;
+  --danger: #EF4444;
+  --danger-hover: #f72121;
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
