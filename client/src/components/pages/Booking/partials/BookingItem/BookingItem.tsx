@@ -1,13 +1,15 @@
 import type { BookingView } from '@/utils/api/types'
+import type { ChosenBlock } from '../../Booking.d'
 import officeBuildingIcon from '@/assets/office-building.svg'
 import styles from '../../Booking.module.css'
 
-interface RelevantBookingProps {
+interface BookingItemProps {
     item: BookingView
-    onDelete: (booking: BookingView) => void
+    type: ChosenBlock
+    onDelete?: (booking: BookingView) => void
 }
 
-export function RelevantBooking({ item, onDelete }: RelevantBookingProps) {
+export function BookingItem({ item, type, onDelete }: BookingItemProps) {
     const startsAt = new Date(item.startsAt)
     const endsAt = new Date(item.endsAt)
 
@@ -43,13 +45,15 @@ export function RelevantBooking({ item, onDelete }: RelevantBookingProps) {
                     </div>
                 </div>
             </div>
-            <button
-                type="button"
-                className={styles.buttonDelete}
-                onClick={() => onDelete(item)}
-            >
-                Отменить
-            </button>
+            {type === 'relevant' && onDelete ? (
+                <button
+                    type="button"
+                    className={styles.buttonDelete}
+                    onClick={() => onDelete(item)}
+                >
+                    Отменить
+                </button>
+            ) : null}
         </div>
     )
 }

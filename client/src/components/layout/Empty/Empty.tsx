@@ -6,7 +6,7 @@ interface EmptyProps {
     icon: string
     title: string
     description: ReactNode
-    actionLabel: string
+    actionLabel?: string
     onAction?: () => void
     actionHref?: string
     variant?: 'default' | 'accent'
@@ -36,15 +36,17 @@ export function Empty({
                 </div>
                 <h3 className={styles.title}>{title}</h3>
                 <p className={styles.description}>{description}</p>
-                {actionHref ? (
-                    <Link to={actionHref} className={actionClassName}>
-                        {actionLabel}
-                    </Link>
-                ) : (
-                    <button type="button" className={actionClassName} onClick={onAction}>
-                        {actionLabel}
-                    </button>
-                )}
+                {actionLabel ? (
+                    actionHref ? (
+                        <Link to={actionHref} className={actionClassName}>
+                            {actionLabel}
+                        </Link>
+                    ) : (
+                        <button type="button" className={actionClassName} onClick={onAction}>
+                            {actionLabel}
+                        </button>
+                    )
+                ) : null}
             </div>
         </div>
     )

@@ -1,21 +1,18 @@
 import styles from './Booking.module.css'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { BookingView } from '@/utils/api/types'
+import type { ChosenBlock } from './Booking.d'
 import { deleteBooking, getBookings } from '@/utils/api/modelFunction'
-import calendarIcon from '@/assets/calendar.svg'
-import chevronDownIcon from '@/assets/chevron-down.svg'
-import { Loading, RelevantList } from './partials'
+import { Loading, BookingList } from './partials'
 import { Error } from '@/components/layout'
 import { DeleteBooking } from '@/components/layout/modals/DeleteBooking/DeleteBooking'
-
-type choosenBlock = 'relevant' | 'past'
 
 export function Booking() {
     const [bookings, setBookings] = useState<BookingView[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
-    const [chosenBlock, setChosenBlock] = useState<choosenBlock>('relevant')
+    const [chosenBlock, setChosenBlock] = useState<ChosenBlock>('relevant')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedBooking, setSelectedBooking] = useState<BookingView | null>(null)
     const [relevantBookings, pastBookings] = useMemo(() => {
@@ -60,7 +57,8 @@ export function Booking() {
         switch (chosenBlock) {
             case 'relevant':
                 return (
-                    <RelevantList
+                    <BookingList
+                        type="relevant"
                         bookings={relevantBookings}
                         onDelete={(booking) => {
                             setSelectedBooking(booking)
@@ -69,9 +67,14 @@ export function Booking() {
                     />
                 )
             case 'past':
-                return null
+                return (
+                    <BookingList
+                        type="past"
+                        bookings={pastBookings}
+                    />
+                )
         }
-    }, [hasError, isLoading, isModalOpen, selectedBooking, chosenBlock, relevantBookings, handleDelete])
+    }, [hasError, isLoading, chosenBlock, relevantBookings, pastBookings])
 
     return (
         <>
@@ -88,16 +91,6 @@ export function Booking() {
             <div className={styles.container}>
                 <div className={styles.header}>
                     <h1 className={styles.headerTitle}>Мои бронирования</h1>
-                    <div className={styles.headerFilters}>
-                        <div className={styles.filterButton}>
-                            <span>Все офисы</span>
-                            <img src={chevronDownIcon} alt="" className={styles.filterChevron} />
-                        </div>
-                        <div className={styles.filterButton}>
-                            <img src={calendarIcon} alt="" className={styles.filterIcon} />
-                            <span>За все время</span>
-                        </div>
-                    </div>
                 </div>
                 <div className={styles.tabNavigation}>
                     <div

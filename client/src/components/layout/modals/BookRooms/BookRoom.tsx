@@ -7,6 +7,7 @@ import { DURATION_OPTIONS } from '@/utils/api/general'
 import { formatTime, getDefaultStartTime } from '@/utils/other'
 import { createBooking } from '@/utils/api/modelFunction'
 import { Entering, Success, Error } from './partials'
+import { bookingSchema } from '@/utils/validation/booking.schema'
 
 interface BookRoomProps {
     room: Room | null
@@ -86,6 +87,11 @@ export function BookRoom({ room, isOpen, onClose, onSuccess }: BookRoomProps) {
             comment,
             startsAt: from.toISOString(),
             endsAt: addMinutes(from, duration).toISOString(),
+        }
+        const validation = bookingSchema.safeParse(request)
+        if(validation.error) {
+            console.log(validation.error)
+            return
         }
         createBooking(request).then(() => {
             setSuccessMessage(successDetails)

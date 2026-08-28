@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 
 interface RoomProps {
     room: Room
+    onBook: () => void
 }
 
-export function Room({ room }: RoomProps) {
+export function Room({ room, onBook }: RoomProps) {
     const navigate = useNavigate()
     return (
         <div className={styles.wrapper}>
@@ -42,7 +43,10 @@ export function Room({ room }: RoomProps) {
                     <div className={styles.detailButton} onClick={() => navigate(`/room/${room.id}`)}>
                         Подробнее
                     </div>
-                    <div className={ room.available === false ? styles.bookButtonDisabled : styles.bookButton} >
+                    <div 
+                        className={ room.available === false ? styles.bookButtonDisabled : styles.bookButton} 
+                        onClick={onBook}
+                    >
                         Забронировать
                     </div>
                 </div>

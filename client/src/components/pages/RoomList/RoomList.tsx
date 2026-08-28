@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { getOffices, getRooms } from '@/utils/api/modelFunction'
 import type { Office } from '@avito/server/src/domain/models'
 import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
@@ -19,9 +19,11 @@ import {
     getDefaultStartTime,
     getTimezoneLabel,
 } from '@/utils/other'
+import { useNavigate } from 'react-router-dom'
 
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
+    const navigate = useNavigate()
     const [activeOffice, setActiveOffice] = useState<Office | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
@@ -71,6 +73,12 @@ export function RoomList() {
         setIsLoading(true)
         fetchRooms()
     }, [onRetry, activeOffice, request.minCapacity, request.from, request.duration])
+
+    const handleBook = useCallback((room: Room) => {
+        navigate(`/room/${room.id}`, {
+            state: request
+        })
+    }, [request.from, request.duration])
     const component = useMemo(() => {
         if (hasError) {
             return <Error
@@ -95,7 +103,7 @@ export function RoomList() {
                 <h3 className={styles.roomListTitle}>Доступные переговорные в этом офисе</h3>
                 <div className={styles.rooms}>
                     {rooms.map((item) => (
-                        <RoomComponent room={item} key={item.id} />
+                        <RoomComponent room={item} key={item.id} onBook={() => handleBook(item)} />
                     ))}
                 </div>
             </div>

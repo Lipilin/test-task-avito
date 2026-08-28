@@ -1,3 +1,3 @@
+export { BookingItem } from './BookingItem'
+export { BookingList } from './BookingList'
 export { Loading } from './Loading'
-export { RelevantBooking } from './Relevant'
-export { RelevantList } from './RelevantList'

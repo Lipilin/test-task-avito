@@ -115,6 +115,15 @@
     background-color: var(--special-color-hover);
 }
 
+.bookButtonDisabled {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 10px 24px;
+    background-color: #cbd5e1;
+    color: #ffffff;
+    cursor: not-allowed;
+}
+
 .timeline {
     display: flex;
     flex-direction: row;
