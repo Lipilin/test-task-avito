@@ -60,6 +60,7 @@ interface TimeInputFieldProps {
     onChange: (value: string) => void
     className?: string
     disabled?: boolean
+    readOnly?: boolean
 }
 
 export function TimeInputField({
@@ -69,6 +70,7 @@ export function TimeInputField({
     onChange,
     className,
     disabled = false,
+    readOnly = false,
 }: TimeInputFieldProps) {
     useEffect(() => {
         if (!TIME_PATTERN.test(value)) return
@@ -112,14 +114,15 @@ export function TimeInputField({
             <div className={styles.inputWrapper}>
                 <img src={clockIcon} alt="" className={styles.inputIcon} />
                 <IMaskInput
-                    className={styles.input}
+                    className={`${styles.input} ${readOnly ? styles.inputReadOnly : ''}`}
                     {...timeMaskOptions}
                     placeholder={placeholder}
                     value={value}
                     disabled={disabled}
+                    readOnly={readOnly}
                     unmask={false}
                     onAccept={handleAccept}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={readOnly ? undefined : handleKeyDown}
                 />
                 <div className={styles.steppers}>
                     <button

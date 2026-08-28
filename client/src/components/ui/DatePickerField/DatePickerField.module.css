@@ -202,16 +202,24 @@
   background-color: transparent;
 }
 
-.calendar :global(.react-datepicker__day--selected),
-.calendar :global(.react-datepicker__day--keyboard-selected) {
+.calendar :global(.react-datepicker__day--selected) {
   background-color: #ccfbf1 !important;
   color: var(--text-h) !important;
   font-weight: 500;
 }
 
-.calendar :global(.react-datepicker__day--selected:hover),
-.calendar :global(.react-datepicker__day--keyboard-selected:hover) {
+.calendar :global(.react-datepicker__day--keyboard-selected:not(.react-datepicker__day--selected)) {
+  background-color: transparent !important;
+  color: var(--text-h) !important;
+  font-weight: 400;
+}
+
+.calendar :global(.react-datepicker__day--selected:hover) {
   background-color: #ccfbf1 !important;
+}
+
+.calendar :global(.react-datepicker__day--keyboard-selected:not(.react-datepicker__day--selected):hover) {
+  background-color: #f8fafc !important;
 }
 
 .calendar :global(.react-datepicker__navigation) {

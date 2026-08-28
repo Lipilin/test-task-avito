@@ -40,6 +40,18 @@ declare global{
         from?: string
         to?: string
     }
+
+    interface CreateBookingRequest{
+        roomId: string
+        title: string
+        comment?: string
+        startsAt: string
+        endsAt: string
+    }
+
+    interface CreateBookingResponse{
+        success: boolean
+    }
 }
 
 declare module '@avito/server/src/domain/models' {

@@ -44,3 +44,10 @@ export async function getRoomBookings(request: BookRoomRequest): Promise<Booking
         return []
     }
 }
+
+export async function createBooking(request: CreateBookingRequest): Promise<CreateBookingResponse> {
+    const response = await axios.post<void>(`${BACKEND_HOST}${ENDPOINTS.BOOKINGS.CREATE}`, request)
+    return {
+        success: true
+    }
+}

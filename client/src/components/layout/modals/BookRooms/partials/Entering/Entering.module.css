@@ -1,0 +1,149 @@
+.title {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    color: var(--text-h);
+}
+
+.roomInfo {
+    margin: -16px 0 0;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--text);
+}
+
+.roomName {
+    font-weight: 600;
+    color: var(--special-color);
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.formField,
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.date,
+.startTime {
+    width: calc(50% - 10px);
+}
+
+.titleLabel,
+.commentLabel {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.form input[type='text'],
+.form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: var(--bg);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--text-h);
+}
+
+.form input[type='text']::placeholder,
+.form textarea::placeholder {
+    font-weight: 400;
+    color: #94a3b8;
+}
+
+.form input[type='text']:focus,
+.form textarea:focus {
+    outline: none;
+    border-color: #cbd5e1;
+}
+
+.form textarea {
+    min-height: 96px;
+    resize: none;
+}
+
+.summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #ccfbf1;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--special-color);
+}
+
+.summaryIcon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.declineButton {
+    padding: 10px 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: var(--bg);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--text-h);
+    cursor: pointer;
+}
+
+.declineButton:hover {
+    background-color: var(--bg-inner);
+}
+
+.bookButton {
+    padding: 10px 24px;
+    border-radius: 8px;
+    background-color: var(--special-color);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--bg);
+    cursor: pointer;
+}
+
+.bookButton:hover {
+    background-color: var(--special-color-hover);
+}

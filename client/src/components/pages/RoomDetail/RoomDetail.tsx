@@ -63,7 +63,7 @@ export function RoomDetail() {
     }, [id, onRetry, selectedDate])
     return (
         <div className={styles.container}>
-            <BookRoomModal isOpen={isBookRoomModalOpen} onClose={() => setIsBookRoomModalOpen(false)} />
+            <BookRoomModal room={room} isOpen={isBookRoomModalOpen} onClose={() => setIsBookRoomModalOpen(false)} />
             {
                 hasError ? (
                     <Error

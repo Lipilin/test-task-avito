@@ -59,6 +59,11 @@
   opacity: 0.6;
 }
 
+.inputReadOnly {
+  cursor: default;
+  caret-color: transparent;
+}
+
 .steppers {
   position: absolute;
   top: 50%;

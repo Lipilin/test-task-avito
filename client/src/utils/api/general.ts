@@ -10,6 +10,9 @@ export const ENDPOINTS ={
         INFO: '	/api/v1/rooms', 
         BOOKINGS: (roomId: string) => `/api/v1/rooms/${roomId}/bookings`
     }, 
+    BOOKINGS: {
+        CREATE: '/api/v1/bookings'
+    }
 } as const
 
 export const DURATION_OPTIONS = [

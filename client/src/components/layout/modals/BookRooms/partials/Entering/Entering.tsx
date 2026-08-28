@@ -1,0 +1,109 @@
+import type { Room } from '../../../../../../utils/api/types'
+import { DatePickerField } from '../../../../../ui/DatePickerField'
+import { TimeInputField } from '../../../../../ui/TimeInputField'
+import { Dropdown, dropdownStyles } from '../../../../../ui/Dropdown'
+import { DURATION_OPTIONS } from '../../../../../../utils/api/general'
+import { applyTimeToDate, formatTime } from '../../../../../../utils/other'
+import infoCircleIcon from '../../../../../../assets/info-circle.svg'
+import styles from './Entering.module.css'
+
+interface DurationOption {
+    id: number
+    name: string | number
+}
+
+interface EnteringProps {
+    room: Room
+    title: string
+    setTitle: (value: string) => void
+    comment: string
+    setComment: (value: string) => void
+    from: Date
+    setFrom: (date: Date) => void
+    duration: number
+    setDuration: (duration: number) => void
+    durationActiveItem: DurationOption | null
+    summaryText: string
+    onBook: () => void
+    onClose: () => void
+}
+
+export function Entering({
+    room,
+    title,
+    setTitle,
+    comment,
+    setComment,
+    from,
+    setFrom,
+    duration,
+    setDuration,
+    durationActiveItem,
+    summaryText,
+    onBook,
+    onClose,
+}: EnteringProps) {
+    return (
+        <>
+            <div className={styles.title}>Новое бронирование</div>
+            <div className={styles.roomInfo}>
+                Переговорная: <span className={styles.roomName}>{room.name}</span>
+            </div>
+            <div className={styles.form}>
+                <div className={styles.formField}>
+                    <div className={styles.titleLabel}>Тема встречи*</div>
+                    <input
+                        type="text"
+                        placeholder="Введите названи встречи"
+                        value={title}
+                        onChange={(event) => setTitle(event.target.value)}
+                    />
+                </div>
+                <div className={styles.date}>
+                    <DatePickerField
+                        selected={from}
+                        onChange={(date) => setFrom(date ?? from)}
+                    />
+                </div>
+                <div className={styles.startTime}>
+                    <TimeInputField
+                        value={formatTime(from)}
+                        readOnly
+                        onChange={(startTime) => setFrom(applyTimeToDate(from, startTime))}
+                    />
+                </div>
+                <div className={styles.formField}>
+                    <Dropdown
+                        items={DURATION_OPTIONS}
+                        setItem={(value) => setDuration(value.id)}
+                        activeItem={durationActiveItem}
+                        title="ДЛИТЕЛЬНОСТЬ"
+                        placeholder="Выберите"
+                        titleClassName={dropdownStyles.titleFilter}
+                        className={dropdownStyles.dropdownFilter}
+                    />
+                </div>
+                <div className={styles.comment}>
+                    <div className={styles.commentLabel}>Комментарий</div>
+                    <textarea
+                        placeholder="Дополнительная информация для участников встречи..."
+                        value={comment}
+                        onChange={(event) => setComment(event.target.value)}
+                    />
+                </div>
+            </div>
+            <div className={styles.summary}>
+                <img src={infoCircleIcon} alt="" className={styles.summaryIcon} />
+                <span>{summaryText}</span>
+            </div>
+            <div className={styles.buttons}>
+                <div className={styles.declineButton} onClick={onClose}>
+                    Отмена
+                </div>
+                <div className={styles.bookButton} onClick={onBook}>
+                    Бронировать
+                </div>
+            </div>
+        </>
+    )
+}
