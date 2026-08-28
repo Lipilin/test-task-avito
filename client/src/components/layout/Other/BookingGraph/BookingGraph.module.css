@@ -1,0 +1,35 @@
+.container {
+  position: absolute;
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.booked {
+  border: 1px solid #99f6e4;
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.occupied {
+  border: 1px solid #e2e8f0;
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

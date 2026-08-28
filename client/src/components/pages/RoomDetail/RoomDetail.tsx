@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { addDays, startOfDay } from 'date-fns'
 import type { Booking, Room } from '@/utils/api/types'
 import { getRoomBookings, getRoomById } from '@/utils/api/modelFunction'
+import { AVAILABLE_TIME } from '@/utils/api/general'
 import usersIcon from '@/assets/room-detail/users.svg'
 import displayIcon from '@/assets/room-detail/display.svg'
 import whiteboardIcon from '@/assets/room-detail/whiteboard.svg'
@@ -12,12 +13,16 @@ import { BookRoomModal } from '@/components/layout/modals'
 import { Loading } from './partials/Loading'
 import { Error } from '@/components/layout'
 import { DatePickerField } from '@/components/ui/DatePickerField'
+import { BookingGraph } from '@/components/layout/Other/BookingGraph'
 
 const featureIcons: Record<string, string> = {
     display: displayIcon,
     whiteboard: whiteboardIcon,
     video: videoIcon,
 }
+
+const [fromHour] = AVAILABLE_TIME.from.split(':').map(Number)
+const [toHour] = AVAILABLE_TIME.to.split(':').map(Number)
 
 export function RoomDetail() {
     const { id } = useParams()
@@ -114,24 +119,36 @@ export function RoomDetail() {
                                     }}
                                 />
                             </div>
-                            <div className = {styles.timeline}>
-                                <div className = {styles.timeline_item}>
-                                    <div className = {styles.timeline_item_time}>
-                                        09:00
-                                    </div>
-                                    <div className = {styles.timeline_item_content}>
-                                            
-                                    </div>
-                                    <div className = { styles.delimeter }></div>
+                            <div className={styles.timeline}>
+                                <div className={styles.timelineTimes}>
+                                    {Array.from({ length: toHour - fromHour + 1 }, (_, index) => {
+                                        const time = `${String(fromHour + index).padStart(2, '0')}:00`
+
+                                        return (
+                                            <div className={styles.timeline_item_time} key={time}>
+                                                {time}
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                                <div className = {styles.timeline_item}>
-                                    <div className = {styles.timeline_item_time}>
-                                        10:00
-                                    </div>
-                                    <div className = {styles.timeline_item_content}>
-                                            
-                                    </div>
-                                    <div className = { styles.delimeter }></div>
+                                <div className={styles.timelineCanvas}>
+                                    {Array.from({ length: toHour - fromHour + 1 }, (_, index) => {
+                                        const time = `${String(fromHour + index).padStart(2, '0')}:00`
+
+                                        return (
+                                            <div className={styles.timeline_line} key={time}>
+                                                <div className={styles.delimeter} />
+                                            </div>
+                                        )
+                                    })}
+                                    {bookings.map((item) => (
+                                        <BookingGraph
+                                            key={item.id}
+                                            title={item.title}
+                                            startsAt={item.startsAt}
+                                            endsAt={item.endsAt}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                             <div className = { styles.actions }>

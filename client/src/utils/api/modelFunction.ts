@@ -33,13 +33,13 @@ export async function getRoomBookings(request: BookRoomRequest): Promise<Booking
     const { id, from, to } = request
     try{
         if(!from || !to) throw new Error('Неверный формат даты')
-        const bookings = await axios.get<Booking[]>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.BOOKINGS(id)}`, {
+        const bookings = await axios.get<BookingGraphResponse>(`${BACKEND_HOST}${ENDPOINTS.ROOMS.BOOKINGS(id)}`, {
             params: {
                 from: from, 
                 to: to
             },
         })
-        return bookings.data
+        return bookings.data.items
     }catch(error){
         return []
     }

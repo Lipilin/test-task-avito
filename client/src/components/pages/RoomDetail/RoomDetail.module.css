@@ -8,6 +8,7 @@
     display: flex;
     gap: 32px;
     padding: 40px 48px 40px;
+    align-items: flex-start;
 }
 
 .roomInfo{
@@ -114,20 +115,36 @@
     background-color: var(--special-color-hover);
 }
 
-.timeline{
-    display: flex;
-    flex-direction: column;
-}
-
-.timeline_item_time{
-    color: var(--text);
-    font-size: 13px;
-    height: 48px;
-}
-
-.timeline_item{
+.timeline {
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.timelineTimes {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.timelineCanvas {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline_line {
+    display: flex;
     align-items: center;
     height: 48px;
+}
+
+.timeline_item_time {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    font-family: var(--sans);
+    color: var(--text);
+    font-size: 13px;
 }
