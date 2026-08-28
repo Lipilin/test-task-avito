@@ -4,15 +4,17 @@ import type { BookingView } from '@/utils/api/types'
 import { deleteBooking, getBookings } from '@/utils/api/modelFunction'
 import calendarIcon from '@/assets/calendar.svg'
 import chevronDownIcon from '@/assets/chevron-down.svg'
-import officeBuildingIcon from '@/assets/office-building.svg'
-import { Loading } from './partials'
-import { Error, Empty } from '@/components/layout'
+import { Loading, RelevantList } from './partials'
+import { Error } from '@/components/layout'
+
+type choosenBlock = 'relevant' | 'past'
 
 export function Booking() {
     const [bookings, setBookings] = useState<BookingView[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
+    const [chosenBlock, setChosenBlock] = useState<choosenBlock>('relevant')
     const [relevantBookings, pastBookings] = useMemo(() => {
         return [bookings.filter((booking) => {
             return new Date(booking.startsAt) > new Date()
@@ -52,75 +54,18 @@ export function Booking() {
         if (isLoading) {
             return <Loading />
         }
-        if (relevantBookings.length === 0) {
-            return (
-                <Empty
-                    icon={officeBuildingIcon}
-                    variant="accent"
-                    title="Нет бронирований"
-                    description={
-                        <>
-                            У вас пока нет предстоящих бронирований.
-                            <br />
-                            Перейдите в раздел переговорных, чтобы забронировать комнату.
-                        </>
-                    }
-                    actionLabel="Перейти к переговорным"
-                    actionHref="/rooms"
-                />
-            )
+        switch (chosenBlock) {
+            case 'relevant':
+                return (
+                    <RelevantList
+                        bookings={relevantBookings}
+                        onDelete={handleDelete}
+                    />
+                )
+            case 'past':
+                return null
         }
-        return (
-            <div className={styles.bookingsList}>
-                { relevantBookings.map((item) => {
-                    const startsAt = new Date(item.startsAt)
-                    const endsAt = new Date(item.endsAt)
-
-                    return (
-                        <div className={styles.bookingItem} key={item.id}>
-                            <div className={styles.bookingItemContent}>
-                                <div className={styles.bookingItemBadge}>
-                                    <span className={styles.badgeMonth}>
-                                        {startsAt.toLocaleDateString('ru-RU', { month: 'long' })}
-                                    </span>
-                                    <span className={styles.badgeDay}>
-                                        {startsAt.toLocaleDateString('ru-RU', { day: 'numeric' })}
-                                    </span>
-                                </div>
-                                <div className={styles.bookingItemInfo}>
-                                    <div className={styles.bookingItemTitle}>
-                                        { item.title }
-                                    </div>
-                                    <div className={styles.bookingItemMeta}>
-                                        <span className={styles.metaRoom}>
-                                            <img src={officeBuildingIcon} alt="" className={styles.metaRoomIcon} />
-                                            { item.room.name }
-                                        </span>
-                                        <span className={styles.metaDot}>·</span>
-                                        <span>{ item.room.floor } этаж</span>
-                                        <span className={styles.metaDot}>·</span>
-                                        <span>
-                                            {startsAt.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
-                                            {' '}-{' '}
-                                            {endsAt.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
-                                            {' '}MSK
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                className={styles.buttonDelete}
-                                onClick={() => handleDelete(item.id)}
-                            >
-                                Отменить
-                            </button>
-                        </div>
-                    )
-                }) }
-            </div>
-        )
-    }, [hasError, isLoading, relevantBookings, handleDelete])
+    }, [hasError, isLoading, chosenBlock, relevantBookings, handleDelete])
 
     return (
         <div className={styles.container}>
@@ -138,10 +83,16 @@ export function Booking() {
                 </div>
             </div>
             <div className={styles.tabNavigation}>
-                <div className={`${styles.tabNavigationItem} ${styles.tabNavigationItemActive}`}>
+                <div
+                    onClick={() => setChosenBlock('relevant')}
+                    className={`${styles.tabNavigationItem} ${chosenBlock === 'relevant' ? styles.tabNavigationItemActive : ''}`}
+                >
                     Предстоящие ({relevantBookings.length})
                 </div>
-                <div className={styles.tabNavigationItem}>
+                <div
+                    className={`${styles.tabNavigationItem} ${chosenBlock === 'past' ? styles.tabNavigationItemActive : ''}`}
+                    onClick={() => setChosenBlock('past')}
+                >
                     Прошедшие ({pastBookings.length})
                 </div>
             </div>
