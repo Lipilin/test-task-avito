@@ -1,10 +1,10 @@
-import type { Room } from '../../../../../../utils/api/types'
-import { DatePickerField } from '../../../../../ui/DatePickerField'
-import { TimeInputField } from '../../../../../ui/TimeInputField'
-import { Dropdown, dropdownStyles } from '../../../../../ui/Dropdown'
-import { DURATION_OPTIONS } from '../../../../../../utils/api/general'
-import { applyTimeToDate, formatTime } from '../../../../../../utils/other'
-import infoCircleIcon from '../../../../../../assets/info-circle.svg'
+import type { Room } from '@/utils/api/types'
+import { DatePickerField } from '@/components/ui/DatePickerField'
+import { TimeInputField } from '@/components/ui/TimeInputField'
+import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
+import { DURATION_OPTIONS } from '@/utils/api/general'
+import { applyTimeToDate, formatTime } from '@/utils/other'
+import infoCircleIcon from '@/assets/info-circle.svg'
 import styles from './Entering.module.css'
 
 interface DurationOption {

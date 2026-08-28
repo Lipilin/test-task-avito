@@ -1,13 +1,13 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Booking } from './components/pages/Booking'
-import { RoomList } from './components/pages/RoomList'
-import { RoomDetail } from './components/pages/RoomDetail'
-import { NotFound } from './components/pages/NotFound'
-import { Header } from './components/layout'
-import type { User } from './utils/api/types'
-import { getUser } from './utils/api/modelFunction'
+import { Booking } from '@/components/pages/Booking'
+import { RoomList } from '@/components/pages/RoomList'
+import { RoomDetail } from '@/components/pages/RoomDetail'
+import { NotFound } from '@/components/pages/NotFound'
+import { Header } from '@/components/layout'
+import type { User } from '@/utils/api/types'
+import { getUser } from '@/utils/api/modelFunction'
 
 
 function App() {

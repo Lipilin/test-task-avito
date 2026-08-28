@@ -2,16 +2,16 @@ import styles from './RoomDetail.module.css'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { addDays, startOfDay } from 'date-fns'
-import type { Booking, Room } from '../../../utils/api/types'
-import { getRoomBookings, getRoomById } from '../../../utils/api/modelFunction'
-import usersIcon from '../../../assets/room-detail/users.svg'
-import displayIcon from '../../../assets/room-detail/display.svg'
-import whiteboardIcon from '../../../assets/room-detail/whiteboard.svg'
-import videoIcon from '../../../assets/room-detail/video.svg'
-import { BookRoomModal } from '../../layout/modals'
+import type { Booking, Room } from '@/utils/api/types'
+import { getRoomBookings, getRoomById } from '@/utils/api/modelFunction'
+import usersIcon from '@/assets/room-detail/users.svg'
+import displayIcon from '@/assets/room-detail/display.svg'
+import whiteboardIcon from '@/assets/room-detail/whiteboard.svg'
+import videoIcon from '@/assets/room-detail/video.svg'
+import { BookRoomModal } from '@/components/layout/modals'
 import { Loading } from './partials/Loading'
-import { Error } from '../RoomList/partials/Error'
-import { DatePickerField } from '../../ui/DatePickerField'
+import { Error } from '@/components/layout'
+import { DatePickerField } from '@/components/ui/DatePickerField'
 
 const featureIcons: Record<string, string> = {
     display: displayIcon,
@@ -68,7 +68,7 @@ export function RoomDetail() {
                 hasError ? (
                     <Error
                         description="Произошла ошибка при загрузке переговорной"
-                        onRetry={() => setOnRetry((count) => count + 1)}
+                        onAction={() => setOnRetry((count) => count + 1)}
                     />
                 ) : isLoading === true && !room ? (
                     <Loading />

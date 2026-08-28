@@ -1,6 +1,6 @@
 import type { Room } from '@avito/server/src/domain/models'
-import usersIcon from '../../../assets/users.svg'
-import clockIcon from '../../../assets/clock.svg'
+import usersIcon from '@/assets/users.svg'
+import clockIcon from '@/assets/clock.svg'
 import styles from './Room.module.css'
 import { useNavigate } from 'react-router-dom'
 

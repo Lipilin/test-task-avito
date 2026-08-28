@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
-import logo from '../../assets/favicon.svg'
+import logo from '@/assets/favicon.svg'
 import styles from './Header.module.css'
-import type { User } from '../../utils/api/types'
+import type { User } from '@/utils/api/types'
 
 interface HeaderProps{
     user: User | null

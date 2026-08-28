@@ -1,4 +1,4 @@
-import officeBuildingIcon from '../../../../../assets/office-building.svg'
+import officeBuildingIcon from '@/assets/office-building.svg'
 import styles from './SelectOffice.module.css'
 
 export function SelectOffice() {

@@ -1,16 +1,18 @@
-import alertTriangleIcon from '../../../../../assets/alert-triangle.svg'
+import alertTriangleIcon from '@/assets/alert-triangle.svg'
 import styles from './Error.module.css'
 
 interface ErrorProps {
     title?: string
     description?: string
-    onRetry?: () => void
+    actionLabel?: string
+    onAction?: () => void
 }
 
 export function Error({
     title = 'Не удалось загрузить данные',
-    description = 'Произошла ошибка при загрузке списка переговорных',
-    onRetry,
+    description = 'Произошла ошибка при загрузке данных',
+    actionLabel = 'Попробовать снова',
+    onAction,
 }: ErrorProps) {
     return (
         <div className={styles.container}>
@@ -20,8 +22,8 @@ export function Error({
                 </div>
                 <h3 className={styles.title}>{title}</h3>
                 <p className={styles.description}>{description}</p>
-                <button type="button" className={styles.button} onClick={onRetry}>
-                    Попробовать снова
+                <button type="button" className={styles.button} onClick={onAction}>
+                    {actionLabel}
                 </button>
             </div>
         </div>

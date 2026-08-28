@@ -6,9 +6,9 @@ import ReactDatePicker, {
 } from 'react-datepicker'
 import { addDays, format, startOfDay } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import calendarIcon from '../../../assets/calendar.svg'
-import chevronLeftIcon from '../../../assets/chevron-left.svg'
-import chevronRightIcon from '../../../assets/chevron-right.svg'
+import calendarIcon from '@/assets/calendar.svg'
+import chevronLeftIcon from '@/assets/chevron-left.svg'
+import chevronRightIcon from '@/assets/chevron-right.svg'
 import styles from './DatePickerField.module.css'
 import 'react-datepicker/dist/react-datepicker.css'
 

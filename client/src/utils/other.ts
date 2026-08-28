@@ -1,4 +1,4 @@
-import { AVAILABLE_TIME } from './api/general'
+import { AVAILABLE_TIME } from '@/utils/api/general'
 
 export const TIME_PATTERN = /^(\d{2}):(\d{2})$/
 

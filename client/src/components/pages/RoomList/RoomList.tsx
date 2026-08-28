@@ -1,24 +1,24 @@
 import { useState, useEffect, useMemo } from 'react'
-import { getOffices, getRooms } from '../../../utils/api/modelFunction'
+import { getOffices, getRooms } from '@/utils/api/modelFunction'
 import type { Office } from '@avito/server/src/domain/models'
-import { Dropdown, dropdownStyles } from '../../ui/Dropdown'
+import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
 import type { Room } from '@avito/server/src/domain/models'
-import { Room as RoomComponent } from '../../layout/rooms/Room'
-import usersIcon from '../../../assets/users.svg'
+import { Room as RoomComponent } from '@/components/layout/rooms/Room'
+import usersIcon from '@/assets/users.svg'
+import searchEmptyIcon from '@/assets/search-empty.svg'
 import styles from './RoomList.module.css'
 import { SelectOffice } from './partials/SelectOffice/SelectOffice'
 import { Loading } from './partials/Loading/Loading'
-import { Error } from './partials/Error/Error'
-import { Empty } from './partials/Empty/Empty'
-import { DatePickerField } from '../../ui/DatePickerField'
-import { TimeInputField } from '../../ui/TimeInputField'
-import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '../../../utils/api/general'
+import { Error, Empty } from '@/components/layout'
+import { DatePickerField } from '@/components/ui/DatePickerField'
+import { TimeInputField } from '@/components/ui/TimeInputField'
+import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '@/utils/api/general'
 import {
     applyTimeToDate,
     formatTime,
     getDefaultStartTime,
     getTimezoneLabel,
-} from '../../../utils/other'
+} from '@/utils/other'
 
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
@@ -72,10 +72,24 @@ export function RoomList() {
         fetchRooms()
     }, [onRetry, activeOffice, request.minCapacity, request.from, request.duration])
     const component = useMemo(() => {
-        if (hasError) return <Error onRetry={() => setOnRetry((count) => count + 1)} />
+        if (hasError) {
+            return <Error
+                description="Произошла ошибка при загрузке списка переговорных"
+                onAction={() => setOnRetry((count) => count + 1)}
+            />
+        }
         if (isLoading) return <Loading />
         if (!activeOffice) return <SelectOffice />
-        if (rooms.length === 0) return <Empty />
+        if (rooms.length === 0) {
+            return (
+                <Empty
+                    icon={searchEmptyIcon}
+                    title="Нет доступных переговорных"
+                    description="Попробуйте изменить параметры фильтрации или выбрать другой офис"
+                    actionLabel="Сбросить фильтры"
+                />
+            )
+        }
         return (
             <div className={styles.roomList}>
                 <h3 className={styles.roomListTitle}>Доступные переговорные в этом офисе</h3>

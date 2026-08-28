@@ -1,10 +1,9 @@
 .container {
-  background-color: #f8fafc;
-  padding: 24px 40px 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 520px;
+  width: 100%;
+  min-height: 360px;
 }
 
 .content {
@@ -60,4 +59,8 @@
   line-height: 20px;
   color: #ffffff;
   cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--special-color-hover);
 }

@@ -1,4 +1,4 @@
-import infoTriangleIcon from '../../../../../assets/info-triangle.svg'
+import infoTriangleIcon from '@/assets/info-triangle.svg'
 import styles from './ConnectionLost.module.css'
 
 export function ConnectionLost() {

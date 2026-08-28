@@ -1,5 +1,5 @@
 import styles from './Dropdown.module.css'
-import arrow from '../../assets/chevron-down.svg'
+import arrow from '@/assets/chevron-down.svg'
 import type { ReactNode } from 'react'
 
 interface BaseElement {

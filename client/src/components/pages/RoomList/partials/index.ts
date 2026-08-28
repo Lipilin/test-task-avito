@@ -1,5 +1,3 @@
 export { Loading } from './Loading'
-export { Error } from './Error'
 export { ConnectionLost } from './ConnectionLost'
 export { SelectOffice } from './SelectOffice'
-export { Empty } from './Empty'

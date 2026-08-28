@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import homeIcon from '../../../assets/home.svg'
+import homeIcon from '@/assets/home.svg'
 import styles from './NotFound.module.css'
 
 export function NotFound() {

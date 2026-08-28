@@ -1,4 +1,4 @@
-import alertTriangleIcon from '../../../../../../assets/alert-triangle.svg'
+import alertTriangleIcon from '@/assets/alert-triangle.svg'
 import styles from './Error.module.css'
 
 interface ErrorProps {

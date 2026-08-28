@@ -1,4 +1,4 @@
-import checkCircleFilledIcon from '../../../../../../assets/check-circle-filled.svg'
+import checkCircleFilledIcon from '@/assets/check-circle-filled.svg'
 import styles from './Success.module.css'
 
 interface SuccessProps {

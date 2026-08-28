@@ -2,9 +2,9 @@ import type { KeyboardEvent } from 'react'
 import { useEffect } from 'react'
 import { IMaskInput } from 'react-imask'
 import IMask from 'imask'
-import clockIcon from '../../../assets/clock.svg'
-import chevronDownIcon from '../../../assets/chevron-down.svg'
-import { AVAILABLE_TIME_MINUTES, formatMinutes, parseTimeToMinutes, TIME_PATTERN } from '../../../utils/other'
+import clockIcon from '@/assets/clock.svg'
+import chevronDownIcon from '@/assets/chevron-down.svg'
+import { AVAILABLE_TIME_MINUTES, formatMinutes, parseTimeToMinutes, TIME_PATTERN } from '@/utils/other'
 import styles from './TimeInputField.module.css'
 
 const { min: MIN_MINUTES, max: MAX_MINUTES, step: STEP_MINUTES, minHour: MIN_HOUR, maxHour: MAX_HOUR } =
