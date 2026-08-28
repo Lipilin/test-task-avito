@@ -6,7 +6,7 @@ import { RelevantBooking } from '../Relevant'
 
 interface RelevantListProps {
     bookings: BookingView[]
-    onDelete: (id: string) => void
+    onDelete: (booking: BookingView) => void
 }
 
 export function RelevantList({ bookings, onDelete }: RelevantListProps) {

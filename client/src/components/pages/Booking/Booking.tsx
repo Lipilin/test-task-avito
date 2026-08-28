@@ -6,6 +6,7 @@ import calendarIcon from '@/assets/calendar.svg'
 import chevronDownIcon from '@/assets/chevron-down.svg'
 import { Loading, RelevantList } from './partials'
 import { Error } from '@/components/layout'
+import { DeleteBooking } from '@/components/layout/modals/DeleteBooking/DeleteBooking'
 
 type choosenBlock = 'relevant' | 'past'
 
@@ -15,6 +16,8 @@ export function Booking() {
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
     const [chosenBlock, setChosenBlock] = useState<choosenBlock>('relevant')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedBooking, setSelectedBooking] = useState<BookingView | null>(null)
     const [relevantBookings, pastBookings] = useMemo(() => {
         return [bookings.filter((booking) => {
             return new Date(booking.startsAt) > new Date()
@@ -59,44 +62,59 @@ export function Booking() {
                 return (
                     <RelevantList
                         bookings={relevantBookings}
-                        onDelete={handleDelete}
+                        onDelete={(booking) => {
+                            setSelectedBooking(booking)
+                            setIsModalOpen(true)
+                        }}
                     />
                 )
             case 'past':
                 return null
         }
-    }, [hasError, isLoading, chosenBlock, relevantBookings, handleDelete])
+    }, [hasError, isLoading, isModalOpen, selectedBooking, chosenBlock, relevantBookings, handleDelete])
 
     return (
-        <div className={styles.container}>
-            <div className={styles.header}>
-                <h1 className={styles.headerTitle}>Мои бронирования</h1>
-                <div className={styles.headerFilters}>
-                    <div className={styles.filterButton}>
-                        <span>Все офисы</span>
-                        <img src={chevronDownIcon} alt="" className={styles.filterChevron} />
+        <>
+            {
+                isModalOpen && selectedBooking && (
+                    <DeleteBooking
+                        onClose={() => setIsModalOpen(false)}
+                        booking={selectedBooking}
+                        onDelete={() => handleDelete(selectedBooking.id)}
+                    />
+                )
+            }
+
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <h1 className={styles.headerTitle}>Мои бронирования</h1>
+                    <div className={styles.headerFilters}>
+                        <div className={styles.filterButton}>
+                            <span>Все офисы</span>
+                            <img src={chevronDownIcon} alt="" className={styles.filterChevron} />
+                        </div>
+                        <div className={styles.filterButton}>
+                            <img src={calendarIcon} alt="" className={styles.filterIcon} />
+                            <span>За все время</span>
+                        </div>
                     </div>
-                    <div className={styles.filterButton}>
-                        <img src={calendarIcon} alt="" className={styles.filterIcon} />
-                        <span>За все время</span>
+                </div>
+                <div className={styles.tabNavigation}>
+                    <div
+                        onClick={() => setChosenBlock('relevant')}
+                        className={`${styles.tabNavigationItem} ${chosenBlock === 'relevant' ? styles.tabNavigationItemActive : ''}`}
+                    >
+                        Предстоящие ({relevantBookings.length})
+                    </div>
+                    <div
+                        className={`${styles.tabNavigationItem} ${chosenBlock === 'past' ? styles.tabNavigationItemActive : ''}`}
+                        onClick={() => setChosenBlock('past')}
+                    >
+                        Прошедшие ({pastBookings.length})
                     </div>
                 </div>
+                {content}
             </div>
-            <div className={styles.tabNavigation}>
-                <div
-                    onClick={() => setChosenBlock('relevant')}
-                    className={`${styles.tabNavigationItem} ${chosenBlock === 'relevant' ? styles.tabNavigationItemActive : ''}`}
-                >
-                    Предстоящие ({relevantBookings.length})
-                </div>
-                <div
-                    className={`${styles.tabNavigationItem} ${chosenBlock === 'past' ? styles.tabNavigationItemActive : ''}`}
-                    onClick={() => setChosenBlock('past')}
-                >
-                    Прошедшие ({pastBookings.length})
-                </div>
-            </div>
-            {content}
-        </div>
+        </>
     )
 }

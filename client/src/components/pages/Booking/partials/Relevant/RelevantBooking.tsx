@@ -4,7 +4,7 @@ import styles from '../../Booking.module.css'
 
 interface RelevantBookingProps {
     item: BookingView
-    onDelete: (id: string) => void
+    onDelete: (booking: BookingView) => void
 }
 
 export function RelevantBooking({ item, onDelete }: RelevantBookingProps) {
@@ -46,7 +46,7 @@ export function RelevantBooking({ item, onDelete }: RelevantBookingProps) {
             <button
                 type="button"
                 className={styles.buttonDelete}
-                onClick={() => onDelete(item.id)}
+                onClick={() => onDelete(item)}
             >
                 Отменить
             </button>
