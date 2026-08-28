@@ -78,7 +78,7 @@ export function RoomList() {
         navigate(`/room/${room.id}`, {
             state: request
         })
-    }, [request.from, request.duration])
+    }, [request.startTime, request.from, request.duration])
     const component = useMemo(() => {
         if (hasError) {
             return <Error

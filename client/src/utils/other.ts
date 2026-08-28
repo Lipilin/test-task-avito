@@ -1,4 +1,5 @@
-import { AVAILABLE_TIME } from '@/utils/api/general'
+import { AVAILABLE_TIME, DURATION_OPTIONS } from '@/utils/api/general'
+import { startOfDay } from 'date-fns'
 
 export const TIME_PATTERN = /^(\d{2}):(\d{2})$/
 
@@ -42,6 +43,25 @@ export function getDefaultStartTime() {
     const roundedMinutes = Math.ceil(minutes / AVAILABLE_TIME.stepMinutes) * AVAILABLE_TIME.stepMinutes
     date.setMinutes(roundedMinutes)
     return date
+}
+
+export function getBookRoomInitialFrom(
+    defaultDate: Date | null,
+    defaultStartTime: string | null,
+): Date {
+    if (defaultDate === null && defaultStartTime === null) {
+        return getDefaultStartTime()
+    }
+
+    const day = startOfDay(defaultDate ?? new Date())
+    const time = defaultStartTime
+        ?? (defaultDate ? formatTime(defaultDate) : formatTime(getDefaultStartTime()))
+
+    return applyTimeToDate(day, time)
+}
+
+export function getBookRoomInitialDuration(defaultDuration: number | null): number {
+    return defaultDuration ?? DURATION_OPTIONS[0].id
 }
 
 export function formatTime(date: Date) {

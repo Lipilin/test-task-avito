@@ -1,10 +1,14 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import { addMinutes, format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import styles from './BookRoom.module.css'
 import type { Room } from '@/utils/api/types'
 import { DURATION_OPTIONS } from '@/utils/api/general'
-import { formatTime, getDefaultStartTime } from '@/utils/other'
+import {
+    formatTime,
+    getBookRoomInitialDuration,
+    getBookRoomInitialFrom,
+} from '@/utils/other'
 import { createBooking } from '@/utils/api/modelFunction'
 import { Entering, Success, Error } from './partials'
 import { bookingSchema } from '@/utils/validation/booking.schema'
@@ -14,6 +18,9 @@ interface BookRoomProps {
     isOpen: boolean
     onClose: () => void
     onSuccess?: () => void
+    defaultDate?: Date | null
+    defaultDuration?: number | null
+    defaultStartTime?: string | null
 }
 
 function capitalizeFirst(value: string) {
@@ -22,14 +29,35 @@ function capitalizeFirst(value: string) {
 
 type modalStates = 'entering' | 'sucess' | 'error'
 
-export function BookRoom({ room, isOpen, onClose, onSuccess }: BookRoomProps) {
+export function BookRoom({
+    room,
+    isOpen,
+    onClose,
+    onSuccess,
+    defaultDate = null,
+    defaultDuration = null,
+    defaultStartTime = null,
+}: BookRoomProps) {
     const [modalState, setModalState] = useState<modalStates>('entering')
     const [showSuccessToast, setShowSuccessToast] = useState(false)
     const [successMessage, setSuccessMessage] = useState('')
-    const [from, setFrom] = useState(getDefaultStartTime)
-    const [duration, setDuration] = useState(DURATION_OPTIONS[0].id)
+    const [from, setFrom] = useState(() => getBookRoomInitialFrom(defaultDate, defaultStartTime))
+    const [duration, setDuration] = useState(() => getBookRoomInitialDuration(defaultDuration))
     const [title, setTitle] = useState('')
     const [comment, setComment] = useState('')
+
+    const resetFormValues = useCallback(() => {
+        setFrom(getBookRoomInitialFrom(defaultDate, defaultStartTime))
+        setDuration(getBookRoomInitialDuration(defaultDuration))
+        setTitle('')
+        setComment('')
+        setModalState('entering')
+    }, [defaultDate, defaultDuration, defaultStartTime])
+
+    useEffect(() => {
+        if (!isOpen) return
+        resetFormValues()
+    }, [isOpen, resetFormValues])
 
     const durationActiveItem = useMemo(() => {
         const option = DURATION_OPTIONS.find((item) => item.id === duration)
@@ -66,13 +94,9 @@ export function BookRoom({ room, isOpen, onClose, onSuccess }: BookRoomProps) {
     }, [])
 
     const resetForm = useCallback(() => {
-        setModalState('entering')
-        setFrom(getDefaultStartTime())
-        setDuration(DURATION_OPTIONS[0].id)
-        setTitle('')
-        setComment('')
+        resetFormValues()
         onClose()
-    }, [])
+    }, [resetFormValues, onClose])
 
     const handleSuccessClose = useCallback(() => {
         setShowSuccessToast(false)

@@ -1,5 +1,5 @@
 import styles from './RoomDetail.module.css'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { addDays, startOfDay } from 'date-fns'
 import type { Booking, Room } from '@/utils/api/types'
@@ -10,13 +10,15 @@ import { Error } from '@/components/layout'
 
 export function RoomDetail() {
     const { id } = useParams()
+    const location = useLocation()
+    const locationState = location.state as RoomListFilters | undefined
     const [room, setRoom] = useState<Room | null>(null)
     const [bookings, setBookings] = useState<Booking[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
     const [isBookRoomModalOpen, setIsBookRoomModalOpen] = useState(false)
-    const [selectedDate, setSelectedDate] = useState(() => startOfDay(new Date()))
+    const [selectedDate, setSelectedDate] = useState(() => startOfDay(locationState?.from || new Date()))
 
     useEffect(() => {
         if (!id) return
@@ -57,6 +59,9 @@ export function RoomDetail() {
                 room={room}
                 isOpen={isBookRoomModalOpen}
                 onClose={() => setIsBookRoomModalOpen(false)}
+                defaultDate={locationState?.from || null}
+                defaultDuration={locationState?.duration || null}
+                defaultStartTime={locationState?.startTime || null}
             />
             {hasError ? (
                 <Error
