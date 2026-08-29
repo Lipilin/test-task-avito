@@ -1,5 +1,14 @@
 import { z } from 'zod'
-import { BOOKING_VALIDATION_MESSAGES as MSG } from '@/utils/api/general'
+import { AVAILABLE_TIME, BOOKING_VALIDATION_MESSAGES as MSG } from '@/utils/api/general'
+
+function getMinutesOfDay(date: Date): number {
+    return date.getHours() * 60 + date.getMinutes()
+}
+
+const maxEndMinutes = (() => {
+    const [hours, minutes] = AVAILABLE_TIME.to.split(':').map(Number)
+    return hours * 60 + minutes
+})()
 
 export const bookingSchema = z.object({
     title: z.string().min(1, { message: MSG.title.required  }),
@@ -20,5 +29,8 @@ export const bookingSchema = z.object({
         .optional(),
 }).refine((data) => new Date(data.endsAt) > new Date(data.startsAt), {
     message: MSG.endsAt.beforeStart,
+    path: ['endsAt'],
+}).refine((data) => getMinutesOfDay(new Date(data.endsAt)) <= maxEndMinutes, {
+    message: MSG.endsAt.afterWorkingHours,
     path: ['endsAt'],
 })

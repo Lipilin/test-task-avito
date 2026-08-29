@@ -6,7 +6,7 @@ export async function getUser(): Promise<User | null> {
     try{
         const response = await axios.get<User>(`${BACKEND_HOST}${ENDPOINTS.USERS.ME}`)
         return response.data || null
-    }catch(error){
+    }catch{
         return null
     }
 }
@@ -40,7 +40,7 @@ export async function getRoomBookings(request: BookRoomRequest): Promise<Booking
             },
         })
         return bookings.data.items
-    }catch(error){
+    }catch{
         return []
     }
 }

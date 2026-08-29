@@ -58,6 +58,7 @@ export const BOOKING_VALIDATION_MESSAGES = {
         required: 'Дата окончания обязательное поле',
         invalid: 'Некорректная дата окончания',
         beforeStart: 'Дата окончания должна быть позже даты начала',
+        afterWorkingHours: `Время окончания не должно превышать ${AVAILABLE_TIME.to}`,
     },
 } as const
 

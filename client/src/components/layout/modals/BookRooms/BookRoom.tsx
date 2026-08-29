@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { addMinutes, format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import styles from './BookRoom.module.css'
@@ -56,11 +56,6 @@ export function BookRoom({
         setModalState('entering')
         setValidationError(null)
     }, [defaultDate, defaultDuration, defaultStartTime])
-
-    useEffect(() => {
-        if (!isOpen) return
-        resetFormValues()
-    }, [isOpen, resetFormValues])
 
     const durationActiveItem = useMemo(() => {
         const option = DURATION_OPTIONS.find((item) => item.id === duration)

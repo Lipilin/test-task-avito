@@ -6,7 +6,7 @@ interface ErrorProps {
     onClose: () => void
 }
 
-export function Error({ onStateBack, onClose }: ErrorProps) {
+export function Error({ onStateBack }: ErrorProps) {
     return (
         <div className={styles.content}>
             <div className={styles.iconWrapper}>

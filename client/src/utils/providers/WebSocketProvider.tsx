@@ -1,9 +1,8 @@
 import { WebSocketContext } from '@/utils/context/WebSocketContext'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { WEBSOCKET_URL, WEBSOCKET_ACTIONS } from '@/utils/api/general'
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
-    const webSocketRef = useRef<WebSocket | null>(null)
     const [isConnected, setIsConnected] = useState(false)
     const [error, setError] = useState<Error | null>(null)
     const [createdActions, setCreatedActions] = useState<CreatedAction[]>([])
@@ -52,16 +51,13 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
         ws.onerror = () => {
             setError(new Error('WebSocket error'))
         }
-        webSocketRef.current = ws
         return () => {
             ws.close()
-            webSocketRef.current = null
         }
     }, [])
 
     return (
         <WebSocketContext.Provider value={{
-            webSocket: webSocketRef.current,
             isConnected,
             error,
             sendMessage: () => {},

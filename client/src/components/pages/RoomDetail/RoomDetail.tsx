@@ -32,6 +32,7 @@ export function RoomDetail() {
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
     const [isBookRoomModalOpen, setIsBookRoomModalOpen] = useState(false)
+    const [bookRoomKey, setBookRoomKey] = useState(0)
     const [selectedDate, setSelectedDate] = useState(() => startOfDay(locationState?.from || new Date()))
 
     useEffect(() => {
@@ -112,6 +113,7 @@ export function RoomDetail() {
     return (
         <div className={styles.container}>
             <BookRoomModal
+                key={bookRoomKey}
                 room={room}
                 isOpen={isBookRoomModalOpen}
                 onClose={() => setIsBookRoomModalOpen(false)}
@@ -134,7 +136,10 @@ export function RoomDetail() {
                         selectedDate={selectedDate}
                         onDateChange={setSelectedDate}
                         available={room.available !== false}
-                        onBookClick={() => setIsBookRoomModalOpen(true)}
+                        onBookClick={() => {
+                            setBookRoomKey((key) => key + 1)
+                            setIsBookRoomModalOpen(true)
+                        }}
                     />
                 </div>
             ) : null}

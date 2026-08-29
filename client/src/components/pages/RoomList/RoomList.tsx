@@ -55,19 +55,19 @@ export function RoomList() {
         })
     }, [availabilityActions, activeOffice?.id, debouceRequest.from, debouceRequest.duration, removeAvailabilityAction])
 
-    useEffect(() => {
-        setRequest((prev) => {
-            return {
-                ...prev,
-                officeId: activeOffice?.id,
-            }
-        })
-    }, [activeOffice])
+    const handleOfficeChange = useCallback((office: Office) => {
+        setActiveOffice(office)
+        setRequest((prev) => ({
+            ...prev,
+            officeId: office.id,
+        }))
+    }, [])
 
     useEffect(() => {
         if (!activeOffice) return
         if (!debouceRequest.from) return
         async function fetchRooms() {
+            setIsLoading(true)
             try {
                 setHasError(false)
                 const to = new Date(debouceRequest.from!)
@@ -86,15 +86,14 @@ export function RoomList() {
                 setIsLoading(false)
             }
         }
-        setIsLoading(true)
-        fetchRooms()
+        void fetchRooms()
     }, [activeOffice, debouceRequest.minCapacity, debouceRequest.from, debouceRequest.duration, onRetry])
 
     const handleBook = useCallback((room: Room) => {
         navigate(`/room/${room.id}`, {
             state: debouceRequest,
         })
-    }, [debouceRequest.startTime, debouceRequest.from, debouceRequest.duration, navigate])
+    }, [navigate, debouceRequest])
 
     const handleRetry = useCallback(() => {
         setOnRetry((count) => count + 1)
@@ -105,7 +104,7 @@ export function RoomList() {
             <OfficeForm
                 offices={offices}
                 activeOffice={activeOffice}
-                onOfficeChange={setActiveOffice}
+                onOfficeChange={handleOfficeChange}
             />
             <FilterForm
                 request={request}

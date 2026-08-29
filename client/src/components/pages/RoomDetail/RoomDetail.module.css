@@ -132,9 +132,9 @@
 }
 
 .timelineTimes {
-    display: flex;
-    flex-direction: column;
+    position: relative;
     flex-shrink: 0;
+    width: 44px;
 }
 
 .timelineCanvas {
@@ -144,16 +144,20 @@
 }
 
 .timeline_line {
+    position: absolute;
+    right: 0;
+    left: 0;
     display: flex;
     align-items: center;
-    height: 48px;
+    transform: translateY(-50%);
 }
 
 .timeline_item_time {
-    display: flex;
-    align-items: center;
-    height: 48px;
+    position: absolute;
+    left: 0;
     font-family: var(--sans);
     color: var(--text);
     font-size: 13px;
+    line-height: 18px;
+    transform: translateY(-50%);
 }

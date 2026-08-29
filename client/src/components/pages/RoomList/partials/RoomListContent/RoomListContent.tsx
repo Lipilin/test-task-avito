@@ -55,7 +55,7 @@ export function RoomListContent({
                 </div>
             </div>
         )
-    }, [hasError, isLoading, activeOffice, rooms])
+    }, [hasError, isLoading, activeOffice, rooms, onRetry, onBook])
 
     return content
 }

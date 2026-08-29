@@ -2,20 +2,12 @@ export * from '@avito/server/src/domain/models'
 
 declare global{
 
-    interface BaseResponse<T>{
+    interface BaseResponse<T> {
         items: T[]
     }
 
-    interface BaseRequest{
-        
-    }
-
-    interface OfficeListResponse extends BaseResponse<Office>{
-
-    }
-    interface RoomsListResponse extends BaseResponse<Room>{
-    
-    }
+    type OfficeListResponse = BaseResponse<Office>
+    type RoomsListResponse = BaseResponse<Room>
 
     interface RoomListFilters{
         duration: number
@@ -53,18 +45,13 @@ declare global{
         success: boolean
     }
 
-    interface BookingsListResponse extends BaseResponse<BookingView>{
+    type BookingsListResponse = BaseResponse<BookingView>
+    type BookingGraphResponse = BaseResponse<Booking>
 
-    }
-
-    interface BookingGraphResponse extends BaseResponse<Booking>{
-
-    }
-
-    interface BaseAction{
+    interface BaseAction {
         type: string
         occurredAt: string
-        data: Record<string, any>
+        data: Record<string, unknown>
     }
 
     interface CreatedAction extends BaseAction{

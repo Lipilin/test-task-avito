@@ -1,4 +1,4 @@
-import { AVAILABLE_TIME } from '@/utils/api/general'
+import { getBookingTimelinePosition, TIMELINE_HOUR_HEIGHT } from '@/utils/other'
 import styles from './BookingGraph.module.css'
 
 export type BookingGraphVariant = 'booked' | 'occupied'
@@ -9,27 +9,6 @@ export interface BookingGraphProps {
     endsAt: Date | string
     variant?: BookingGraphVariant
     hourHeight?: number
-    dayStartHour?: number
-}
-
-const DEFAULT_HOUR_HEIGHT = 48
-
-function getTimelinePosition(
-    startsAt: Date | string,
-    endsAt: Date | string,
-    dayStartHour: number,
-    hourHeight: number,
-) {
-    const start = new Date(startsAt)
-    const end = new Date(endsAt)
-    const startMinutes = start.getHours() * 60 + start.getMinutes()
-    const endMinutes = end.getHours() * 60 + end.getMinutes()
-    const dayStartMinutes = dayStartHour * 60
-
-    return {
-        top: ((startMinutes - dayStartMinutes) / 60) * hourHeight,
-        height: ((endMinutes - startMinutes) / 60) * hourHeight,
-    }
 }
 
 export function BookingGraph({
@@ -37,10 +16,9 @@ export function BookingGraph({
     startsAt,
     endsAt,
     variant = 'booked',
-    hourHeight = DEFAULT_HOUR_HEIGHT,
-    dayStartHour = Number(AVAILABLE_TIME.from.split(':')[0]),
+    hourHeight = TIMELINE_HOUR_HEIGHT,
 }: BookingGraphProps) {
-    const { top, height } = getTimelinePosition(startsAt, endsAt, dayStartHour, hourHeight)
+    const { top, height } = getBookingTimelinePosition(startsAt, endsAt, hourHeight)
     const label = variant === 'occupied' ? title || 'Занято' : title
 
     return (

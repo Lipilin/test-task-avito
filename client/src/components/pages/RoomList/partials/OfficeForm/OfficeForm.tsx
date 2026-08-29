@@ -1,5 +1,6 @@
 import type { Office } from '@avito/server/src/domain/models'
-import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
+import { Dropdown } from '@/components/ui/Dropdown'
+import { dropdownStyles } from '@/components/ui/dropdownStyles'
 import { getTimezoneLabel } from '@/utils/other'
 import styles from '../../RoomList.module.css'
 

@@ -16,6 +16,51 @@ export const AVAILABLE_TIME_MINUTES = {
     maxHour: Math.floor(parseConfigTimeToMinutes(AVAILABLE_TIME.to) / 60),
 }
 
+export const TIMELINE_HOUR_HEIGHT = 48
+
+export function getTimelineHeight(hourHeight = TIMELINE_HOUR_HEIGHT): number {
+    return ((AVAILABLE_TIME_MINUTES.max - AVAILABLE_TIME_MINUTES.min) / 60) * hourHeight
+}
+
+export function getTimelineHourLabels(): number[] {
+    const labels: number[] = []
+
+    for (let hour = AVAILABLE_TIME_MINUTES.minHour; hour <= AVAILABLE_TIME_MINUTES.maxHour; hour += 1) {
+        labels.push(hour)
+    }
+
+    return labels
+}
+
+export function getTimelineTopByMinutes(
+    totalMinutes: number,
+    hourHeight = TIMELINE_HOUR_HEIGHT,
+): number {
+    return ((totalMinutes - AVAILABLE_TIME_MINUTES.min) / 60) * hourHeight
+}
+
+export function getTimelineTopByHour(hour: number, hourHeight = TIMELINE_HOUR_HEIGHT): number {
+    return getTimelineTopByMinutes(hour * 60, hourHeight)
+}
+
+export function getBookingTimelinePosition(
+    startsAt: Date | string,
+    endsAt: Date | string,
+    hourHeight = TIMELINE_HOUR_HEIGHT,
+): { top: number; height: number } {
+    const start = new Date(startsAt)
+    const end = new Date(endsAt)
+    const startMinutes = start.getHours() * 60 + start.getMinutes()
+    const endMinutes = end.getHours() * 60 + end.getMinutes()
+    const top = getTimelineTopByMinutes(startMinutes, hourHeight)
+    const bottom = getTimelineTopByMinutes(endMinutes, hourHeight)
+
+    return {
+        top,
+        height: Math.max(bottom - top, 0),
+    }
+}
+
 export function parseTimeToMinutes(value: string): number | null {
     const match = value.match(TIME_PATTERN)
     if (!match) return null

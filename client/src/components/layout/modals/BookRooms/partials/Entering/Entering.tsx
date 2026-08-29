@@ -3,7 +3,8 @@ import type { z } from 'zod'
 import type { Room } from '@/utils/api/types'
 import { DatePickerField } from '@/components/ui/DatePickerField'
 import { TimeInputField } from '@/components/ui/TimeInputField'
-import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
+import { Dropdown } from '@/components/ui/Dropdown'
+import { dropdownStyles } from '@/components/ui/dropdownStyles'
 import { DURATION_OPTIONS } from '@/utils/api/general'
 import { applyTimeToDate, formatTime } from '@/utils/other'
 import infoCircleIcon from '@/assets/info-circle.svg'
@@ -49,7 +50,6 @@ export function Entering({
     setComment,
     from,
     setFrom,
-    duration,
     setDuration,
     durationActiveItem,
     summaryText,

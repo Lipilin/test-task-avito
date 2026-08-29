@@ -57,5 +57,3 @@ export function Dropdown<T extends BaseElement>({
         </div>
     )
 }
-
-export { styles as dropdownStyles }

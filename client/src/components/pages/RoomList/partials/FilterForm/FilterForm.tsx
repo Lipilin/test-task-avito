@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
+import { Dropdown } from '@/components/ui/Dropdown'
+import { dropdownStyles } from '@/components/ui/dropdownStyles'
 import { DatePickerField } from '@/components/ui/DatePickerField'
 import { TimeInputField } from '@/components/ui/TimeInputField'
 import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '@/utils/api/general'
