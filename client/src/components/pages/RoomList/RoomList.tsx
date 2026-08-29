@@ -20,6 +20,7 @@ import {
     getTimezoneLabel,
 } from '@/utils/other'
 import { useNavigate } from 'react-router-dom'
+import useDebounce from '@/utils/hooks/useDebounce'
 
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
@@ -33,6 +34,7 @@ export function RoomList() {
         duration: DURATION_OPTIONS[0].id,
         minCapacity: CAPACITY_OPTIONS[0].id,
     })
+    const debouceRequest = useDebounce(request, 500)
     const [rooms, setRooms] = useState<Room[]>([])
     useEffect(() => {
         async function fetchOffices() {
@@ -51,16 +53,17 @@ export function RoomList() {
     }, [activeOffice])
     useEffect(() => {
         if (!activeOffice) return
+        if(!debouceRequest.from) return
         async function fetchRooms() {
             try {
                 setHasError(false)
-                const to = new Date(request.from!)
-                to.setMinutes(to.getMinutes() + request.duration!)
+                const to = new Date(debouceRequest.from!)
+                to.setMinutes(to.getMinutes() + debouceRequest.duration!)
                 const rooms = await getRooms({
                     officeId: activeOffice!.id,
-                    from: request.from?.toISOString(),
+                    from: debouceRequest.from?.toISOString(),
                     to: to.toISOString(),
-                    minCapacity: request.minCapacity,
+                    minCapacity: debouceRequest.minCapacity,
                 })
                 setRooms(rooms)
             } catch {
@@ -72,13 +75,13 @@ export function RoomList() {
         }
         setIsLoading(true)
         fetchRooms()
-    }, [onRetry, activeOffice, request.minCapacity, request.from, request.duration])
+    }, [activeOffice, debouceRequest.minCapacity, debouceRequest.from, debouceRequest.duration])
 
     const handleBook = useCallback((room: Room) => {
         navigate(`/room/${room.id}`, {
-            state: request
+            state: debouceRequest
         })
-    }, [request.startTime, request.from, request.duration])
+    }, [debouceRequest.startTime, debouceRequest.from, debouceRequest.duration])
     const component = useMemo(() => {
         if (hasError) {
             return <Error
