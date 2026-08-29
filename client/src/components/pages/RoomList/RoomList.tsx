@@ -1,14 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getOffices, getRooms } from '@/utils/api/modelFunction'
 import type { Office, Room } from '@avito/server/src/domain/models'
 import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '@/utils/api/general'
-import { getDefaultStartTime } from '@/utils/other'
+import { getDefaultStartTime, matchesRoomListAvailabilityEvent } from '@/utils/other'
 import useDebounce from '@/utils/hooks/useDebounce'
+import { WebSocketContext } from '@/utils/context/WebSocketContext'
 import styles from './RoomList.module.css'
 import { FilterForm, OfficeForm, RoomListContent } from './partials'
 
 export function RoomList() {
+    const { availabilityActions, removeAvailabilityAction } = useContext(WebSocketContext)
     const [offices, setOffices] = useState<Office[]>([])
     const navigate = useNavigate()
     const [activeOffice, setActiveOffice] = useState<Office | null>(null)
@@ -30,6 +32,28 @@ export function RoomList() {
         }
         fetchOffices()
     }, [])
+
+    useEffect(() => {
+        if (availabilityActions.length === 0) return
+        if (!debouceRequest.from) return
+
+        availabilityActions.forEach((action) => {
+            const { data } = action
+            if (matchesRoomListAvailabilityEvent(
+                data,
+                activeOffice?.id,
+                debouceRequest.from!,
+                debouceRequest.duration,
+            )) {
+                setRooms((prev) => prev.map((item) => (
+                    item.id === data.roomId
+                        ? { ...item, available: data.available }
+                        : item
+                )))
+            }
+            removeAvailabilityAction(action)
+        })
+    }, [availabilityActions, activeOffice?.id, debouceRequest.from, debouceRequest.duration, removeAvailabilityAction])
 
     useEffect(() => {
         setRequest((prev) => {
@@ -64,13 +88,13 @@ export function RoomList() {
         }
         setIsLoading(true)
         fetchRooms()
-    }, [activeOffice, debouceRequest.minCapacity, debouceRequest.from, debouceRequest.duration])
+    }, [activeOffice, debouceRequest.minCapacity, debouceRequest.from, debouceRequest.duration, onRetry])
 
     const handleBook = useCallback((room: Room) => {
         navigate(`/room/${room.id}`, {
             state: debouceRequest,
         })
-    }, [debouceRequest.startTime, debouceRequest.from, debouceRequest.duration])
+    }, [debouceRequest.startTime, debouceRequest.from, debouceRequest.duration, navigate])
 
     const handleRetry = useCallback(() => {
         setOnRetry((count) => count + 1)

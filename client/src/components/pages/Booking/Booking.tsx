@@ -1,14 +1,22 @@
 import styles from './Booking.module.css'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { BookingView } from '@/utils/api/types'
 import type { ChosenBlock } from './Booking.d'
-import { deleteBooking, getBookings } from '@/utils/api/modelFunction'
+import { deleteBooking, getBookings, getUser } from '@/utils/api/modelFunction'
+import { WebSocketContext } from '@/utils/context/WebSocketContext'
 import { Loading, BookingList } from './partials'
 import { Error } from '@/components/layout'
 import { DeleteBooking } from '@/components/layout/modals/DeleteBooking/DeleteBooking'
 
 export function Booking() {
+    const {
+        createdActions,
+        cancelledActions,
+        removeCreatedAction,
+        removeCancelledAction,
+    } = useContext(WebSocketContext)
     const [bookings, setBookings] = useState<BookingView[]>([])
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [hasError, setHasError] = useState(false)
     const [onRetry, setOnRetry] = useState(0)
@@ -22,6 +30,15 @@ export function Booking() {
             return new Date(booking.startsAt) < new Date()
         })]
     }, [bookings])
+
+    useEffect(() => {
+        async function fetchUser() {
+            const user = await getUser()
+            setCurrentUserId(user?.id ?? null)
+        }
+        fetchUser()
+    }, [])
+
     useEffect(() => {
         async function fetchBookings() {
             try {
@@ -38,8 +55,46 @@ export function Booking() {
         }
         fetchBookings()
     }, [onRetry])
-    const handleDelete = useCallback((id: string) => {
-        deleteBooking(id)
+
+    useEffect(() => {
+        if (createdActions.length === 0 || !currentUserId) return
+
+        createdActions.forEach((action) => {
+            const { booking } = action.data
+            if (booking.userId === currentUserId) {
+                setBookings((prev) => {
+                    if (prev.some((item) => item.id === booking.id)) return prev
+
+                    return [...prev, booking].sort(
+                        (left, right) => new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime(),
+                    )
+                })
+            }
+            removeCreatedAction(action)
+        })
+    }, [createdActions, currentUserId, removeCreatedAction])
+
+    useEffect(() => {
+        if (cancelledActions.length === 0) return
+
+        cancelledActions.forEach((action) => {
+            const { booking } = action.data
+            setBookings((prev) => prev.filter((item) => item.id !== booking.id))
+            setSelectedBooking((prev) => {
+                if (prev?.id === booking.id) {
+                    setIsModalOpen(false)
+                    return null
+                }
+                return prev
+            })
+            removeCancelledAction(action)
+        })
+    }, [cancelledActions, removeCancelledAction])
+
+    const handleDelete = useCallback(async (id: string) => {
+        await deleteBooking(id)
+        setIsModalOpen(false)
+        setSelectedBooking(null)
     }, [])
 
     const content = useMemo(() => {

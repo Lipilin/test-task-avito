@@ -8,6 +8,7 @@ import { NotFound } from '@/components/pages/NotFound'
 import { Header } from '@/components/layout'
 import type { User } from '@/utils/api/types'
 import { getUser } from '@/utils/api/modelFunction'
+import { WebSocketProvider } from '@/utils/providers/WebSocketProvider'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     }, [])
     return (
       <>
+        <WebSocketProvider>
         <BrowserRouter>
           <Header user={user} />
           <div className = "container">
@@ -32,8 +34,9 @@ function App() {
                 <Route path="/booking" element={<Booking />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
-          </div>
-        </BrowserRouter>
+            </div>
+          </BrowserRouter>
+        </WebSocketProvider>
       </>
     )
 }

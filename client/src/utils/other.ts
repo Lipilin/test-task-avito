@@ -1,5 +1,5 @@
 import { AVAILABLE_TIME, DURATION_OPTIONS } from '@/utils/api/general'
-import { startOfDay } from 'date-fns'
+import { addDays, startOfDay } from 'date-fns'
 
 export const TIME_PATTERN = /^(\d{2}):(\d{2})$/
 
@@ -62,6 +62,37 @@ export function getBookRoomInitialFrom(
 
 export function getBookRoomInitialDuration(defaultDuration: number | null): number {
     return defaultDuration ?? DURATION_OPTIONS[0].id
+}
+
+export function intervalsOverlap(startA: Date, endA: Date, startB: Date, endB: Date): boolean {
+    return startA.getTime() < endB.getTime() && endA.getTime() > startB.getTime()
+}
+
+export function matchesRoomListAvailabilityEvent(
+    data: { officeId: string; startsAt: string; endsAt: string },
+    activeOfficeId: string | undefined,
+    from: Date,
+    duration: number,
+): boolean {
+    if (!activeOfficeId || activeOfficeId !== data.officeId) return false
+
+    const filterEnd = new Date(from)
+    filterEnd.setMinutes(filterEnd.getMinutes() + duration)
+
+    return intervalsOverlap(
+        from,
+        filterEnd,
+        new Date(data.startsAt),
+        new Date(data.endsAt),
+    )
+}
+
+export function isBookingOnDay(startsAt: string | Date, day: Date): boolean {
+    const dayStart = startOfDay(day)
+    const dayEnd = addDays(dayStart, 1)
+    const start = new Date(startsAt)
+
+    return start >= dayStart && start < dayEnd
 }
 
 export function formatTime(date: Date) {

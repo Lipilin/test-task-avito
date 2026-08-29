@@ -60,3 +60,11 @@ export const BOOKING_VALIDATION_MESSAGES = {
         beforeStart: 'Дата окончания должна быть позже даты начала',
     },
 } as const
+
+export const WEBSOCKET_URL = 'ws://localhost:3000/api/v1/ws'
+
+export const WEBSOCKET_ACTIONS = {
+    BOOKING_CREATED: 'booking.created',
+    BOOKING_CANCELLED: 'booking.cancelled',
+    ROOM_CHANGE_AVAILABILITY: 'room.availability_changed',
+} as const
