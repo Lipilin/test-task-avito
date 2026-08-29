@@ -48,8 +48,6 @@ export const AVAILABLE_TIME = {
 export const BOOKING_VALIDATION_MESSAGES = {
     title: {
         required: 'Название бронирования обязательное поле',
-        min: 'Название должно содержать минимум 3 символа',
-        max: 'Название не должно превышать 255 символов',
     },
     startsAt: {
         required: 'Дата начала обязательное поле',
@@ -60,8 +58,5 @@ export const BOOKING_VALIDATION_MESSAGES = {
         required: 'Дата окончания обязательное поле',
         invalid: 'Некорректная дата окончания',
         beforeStart: 'Дата окончания должна быть позже даты начала',
-    },
-    comment: {
-        max: 'Комментарий не должен превышать 2000 символов',
     },
 } as const

@@ -86,6 +86,38 @@
     resize: none;
 }
 
+.inputError {
+    border-color: var(--danger) !important;
+}
+
+.fieldError input {
+    border-color: var(--danger) !important;
+}
+
+.dropdownError {
+    border-color: var(--danger) !important;
+}
+
+.validationErrors {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 12px 16px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background-color: #fef2f2;
+    list-style: none;
+}
+
+.validationErrors li {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--danger);
+}
+
 .summary {
     display: flex;
     align-items: center;

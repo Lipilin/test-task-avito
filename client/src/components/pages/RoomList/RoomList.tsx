@@ -1,26 +1,12 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { getOffices, getRooms } from '@/utils/api/modelFunction'
-import type { Office } from '@avito/server/src/domain/models'
-import { Dropdown, dropdownStyles } from '@/components/ui/Dropdown'
-import type { Room } from '@avito/server/src/domain/models'
-import { Room as RoomComponent } from '@/components/layout/rooms/Room'
-import usersIcon from '@/assets/users.svg'
-import searchEmptyIcon from '@/assets/search-empty.svg'
-import styles from './RoomList.module.css'
-import { SelectOffice } from './partials/SelectOffice/SelectOffice'
-import { Loading } from './partials/Loading/Loading'
-import { Error, Empty } from '@/components/layout'
-import { DatePickerField } from '@/components/ui/DatePickerField'
-import { TimeInputField } from '@/components/ui/TimeInputField'
-import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '@/utils/api/general'
-import {
-    applyTimeToDate,
-    formatTime,
-    getDefaultStartTime,
-    getTimezoneLabel,
-} from '@/utils/other'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getOffices, getRooms } from '@/utils/api/modelFunction'
+import type { Office, Room } from '@avito/server/src/domain/models'
+import { DURATION_OPTIONS, CAPACITY_OPTIONS } from '@/utils/api/general'
+import { getDefaultStartTime } from '@/utils/other'
 import useDebounce from '@/utils/hooks/useDebounce'
+import styles from './RoomList.module.css'
+import { FilterForm, OfficeForm, RoomListContent } from './partials'
 
 export function RoomList() {
     const [offices, setOffices] = useState<Office[]>([])
@@ -36,6 +22,7 @@ export function RoomList() {
     })
     const debouceRequest = useDebounce(request, 500)
     const [rooms, setRooms] = useState<Room[]>([])
+
     useEffect(() => {
         async function fetchOffices() {
             const offices = await getOffices()
@@ -43,17 +30,19 @@ export function RoomList() {
         }
         fetchOffices()
     }, [])
+
     useEffect(() => {
         setRequest((prev) => {
             return {
                 ...prev,
-                officeId: activeOffice?.id
+                officeId: activeOffice?.id,
             }
         })
     }, [activeOffice])
+
     useEffect(() => {
         if (!activeOffice) return
-        if(!debouceRequest.from) return
+        if (!debouceRequest.from) return
         async function fetchRooms() {
             try {
                 setHasError(false)
@@ -79,124 +68,33 @@ export function RoomList() {
 
     const handleBook = useCallback((room: Room) => {
         navigate(`/room/${room.id}`, {
-            state: debouceRequest
+            state: debouceRequest,
         })
     }, [debouceRequest.startTime, debouceRequest.from, debouceRequest.duration])
-    const component = useMemo(() => {
-        if (hasError) {
-            return <Error
-                description="Произошла ошибка при загрузке списка переговорных"
-                onAction={() => setOnRetry((count) => count + 1)}
-            />
-        }
-        if (isLoading) return <Loading />
-        if (!activeOffice) return <SelectOffice />
-        if (rooms.length === 0) {
-            return (
-                <Empty
-                    icon={searchEmptyIcon}
-                    title="Нет доступных переговорных"
-                    description="Попробуйте изменить параметры фильтрации или выбрать другой офис"
-                    actionLabel="Сбросить фильтры"
-                />
-            )
-        }
-        return (
-            <div className={styles.roomList}>
-                <h3 className={styles.roomListTitle}>Доступные переговорные в этом офисе</h3>
-                <div className={styles.rooms}>
-                    {rooms.map((item) => (
-                        <RoomComponent room={item} key={item.id} onBook={() => handleBook(item)} />
-                    ))}
-                </div>
-            </div>
-        )
-    }, [hasError, isLoading, activeOffice, rooms])
+
+    const handleRetry = useCallback(() => {
+        setOnRetry((count) => count + 1)
+    }, [])
+
     return (
         <div className={styles.container}>
-            <div className={styles.officeForm}>
-                <Dropdown
-                    items={offices}
-                    setItem={(value: Office) => setActiveOffice(value)}
-                    activeItem={activeOffice}
-                    title="ОФИС"
-                    placeholder='Выберите офис'
-                    titleClassName={dropdownStyles.titleOffice}
-                    className={dropdownStyles.dropdownOffice}
-                />
-                {activeOffice ? (
-                    <div className={styles.officeData}>
-                        <span>{activeOffice.address}</span>
-                        <span className={styles.officeDataSeparator}>•</span>
-                        <span>
-                            Местное время:{' '}
-                            {new Date().toLocaleTimeString('ru-RU', {
-                                timeZone: activeOffice.timezone,
-                                hour: '2-digit',
-                                minute: '2-digit',
-                            })}{' '}
-                            {getTimezoneLabel(activeOffice.timezone)}
-                        </span>
-                    </div>
-                ) : null}
-            </div>
-            <div className={styles.filterForm}>
-                <div className={styles.filterItemDate}>
-                    <DatePickerField
-                        selected={ request.from || new Date()}
-                        onChange={(date: Date | null) =>
-                            setRequest((prev) => ({
-                                ...prev,
-                                from: date ?? new Date(),
-                            }))
-                        }
-                    />
-                </div>
-                <div className={styles.filterItemTime}>
-                    <TimeInputField
-                        value={formatTime(request.from)}
-                        onChange={(startTime) =>
-                            setRequest((prev) => ({
-                                ...prev,
-                                from: applyTimeToDate(prev.from, startTime),
-                            }))
-                        }
-                    />
-                </div>
-                <div className={styles.filterItemDuration}>
-                    <Dropdown
-                        items={DURATION_OPTIONS}
-                        setItem={(value) => {
-                            setRequest((prev) => ({
-                                ...prev,
-                                duration: value.id
-                            }))
-                        }}
-                        activeItem={DURATION_OPTIONS.find((item) => item.id === request?.duration) || null}
-                        title="ДЛИТЕЛЬНОСТЬ"
-                        placeholder='Выберите'
-                        titleClassName={dropdownStyles.titleFilter}
-                        className={dropdownStyles.dropdownFilter}
-                    />
-                </div>
-
-                <div className={styles.filterItemCapacity}>
-                    <Dropdown
-                        items={ CAPACITY_OPTIONS }
-                        setItem={(value) => setRequest((prev) => ({
-                            ...prev,
-                            minCapacity: value.id
-                        }))}
-                        activeItem={ CAPACITY_OPTIONS.find((item) => item.id === request?.minCapacity) || null }
-                        title="ВМЕСТИМОСТЬ"
-                        placeholder='Не указано'
-                        titleClassName={dropdownStyles.titleFilter}
-                        className={dropdownStyles.dropdownFilter}
-                        leadingIcon={<img src={usersIcon} alt="" />}
-                    />
-                </div>
-            </div>
-            { component  }
+            <OfficeForm
+                offices={offices}
+                activeOffice={activeOffice}
+                onOfficeChange={setActiveOffice}
+            />
+            <FilterForm
+                request={request}
+                setRequest={setRequest}
+            />
+            <RoomListContent
+                hasError={hasError}
+                isLoading={isLoading}
+                activeOffice={activeOffice}
+                rooms={rooms}
+                onRetry={handleRetry}
+                onBook={handleBook}
+            />
         </div>
     )
 }

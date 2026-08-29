@@ -40,7 +40,7 @@ export function Room({ room, onBook }: RoomProps) {
                     </div>
                 ) }
                 <div className={styles.buttons}>
-                    <div className={styles.detailButton} onClick={() => navigate(`/room/${room.id}`)}>
+                    <div className={styles.detailButton} onClick={onBook}>
                         Подробнее
                     </div>
                     {room.available === false ? (

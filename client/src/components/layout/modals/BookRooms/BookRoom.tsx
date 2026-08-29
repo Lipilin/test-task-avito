@@ -12,6 +12,7 @@ import {
 import { createBooking } from '@/utils/api/modelFunction'
 import { Entering, Success, Error } from './partials'
 import { bookingSchema } from '@/utils/validation/booking.schema'
+import type { z } from 'zod'
 
 interface BookRoomProps {
     room: Room | null
@@ -45,6 +46,7 @@ export function BookRoom({
     const [duration, setDuration] = useState(() => getBookRoomInitialDuration(defaultDuration))
     const [title, setTitle] = useState('')
     const [comment, setComment] = useState('')
+    const [validationError, setValidationError] = useState<z.ZodError | null>(null)
 
     const resetFormValues = useCallback(() => {
         setFrom(getBookRoomInitialFrom(defaultDate, defaultStartTime))
@@ -52,6 +54,7 @@ export function BookRoom({
         setTitle('')
         setComment('')
         setModalState('entering')
+        setValidationError(null)
     }, [defaultDate, defaultDuration, defaultStartTime])
 
     useEffect(() => {
@@ -114,9 +117,10 @@ export function BookRoom({
         }
         const validation = bookingSchema.safeParse(request)
         if(validation.error) {
-            console.log(validation.error)
+            setValidationError(validation.error)
             return
         }
+        setValidationError(null)
         createBooking(request).then(() => {
             setSuccessMessage(successDetails)
             resetForm()
@@ -153,6 +157,7 @@ export function BookRoom({
                                 setDuration={setDuration}
                                 durationActiveItem={durationActiveItem}
                                 summaryText={summaryText}
+                                validationError={validationError}
                                 onBook={handleBookClick}
                                 onClose={onClose}
                             />
